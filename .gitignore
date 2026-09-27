@@ -37,8 +37,11 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-example
+
 
 # generated native folders
 /ios
 /android
+
+# quality-gate export output
+.export-check/
