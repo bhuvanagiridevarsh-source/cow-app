@@ -2,17 +2,16 @@
 
 > **New session?** Read these first, in order: `docs/BRIEF.md`, `docs/PLAN.md`, this file, then run `git status`. Continue from **Next step** below.
 
-_Last updated: Sep 27, 2026 (end of Phase 1)_
+_Last updated: Sep 27, 2026 (end of Phase 2)_
 
 ## Current phase
 
-**Phase 1: Foundation is COMPLETE.** Next is **Phase 2: Database & security** (MAX effort).
-The plan was approved with "go", which accepted every recommended decision D1–D8 (PLAN.md §2).
+**Phase 2: Database & security is COMPLETE.** Next is **Phase 3: Accounts & sign-in** (MAX effort).
 
 ## Next step
 
-Announce Phase 2 with `⚙️ Set effort to MAX for this phase`, wait for "ready", then start step 2.1: write `docs/SAFETY_POLICY_DRAFT.md`.
-Step 2.2 creates the `cow-app-dev` Supabase project. Show the cost from `get_cost` first and get the user's OK (D1).
+Announce Phase 3 with `⚙️ Set effort to MAX for this phase`, wait for "ready", then start step 3.1: the Supabase client, saved sessions, and the "not set up yet" screen.
+The user will need to do some Supabase dashboard setup in step 3.6: the email template with the code, the Apple Client ID `host.exp.Exponent`, and the demo accounts.
 
 ## Done
 
@@ -31,6 +30,19 @@ Step 2.2 creates the `cow-app-dev` Supabase project. Show the cost from `get_cos
 - [x] 1.4 `src/theme.ts` (site colors, AA-tested in both themes), fonts, UI building blocks, the `Lamp` diya (replaces Lottie), custom tab bar, 5 tabs.
 - [x] 1.5 `src/config.ts` (brief §10), link helpers, blank-URL hiding, tests.
 - [x] 1.6 Phone check #1 done. The temporary dev-check screen was removed. The lamp flicker was made stronger after feedback.
+- [x] 2.1 `docs/SAFETY_POLICY_DRAFT.md`, for the board.
+- [x] 2.2 Dev Supabase project **cow-app-dev** created: ref `uhmwcvkgwlpejcdvudun`, us-east-1, org "Blogs", free, $0. The URL and publishable key are in `.env` (git-ignored).
+- [x] 2.3 Migrations `supabase/migrations/…000100` through `…000800` are applied to dev:
+  - schema
+  - ZIP data (4,324 ZIPs)
+  - security rules
+  - functions and guards
+  - admin commands
+  - storage
+  - API wrappers
+  - the block-visibility fix
+- [x] 2.4 TypeScript types saved in `src/lib/database.types.ts`. App-side rule copies are in `src/domain/{age,zip,status}.ts`, with friendly error messages in `src/features/errors.ts`.
+- [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
 
@@ -50,6 +62,10 @@ Step 2.2 creates the `cow-app-dev` Supabase project. Show the cost from `get_cos
   - The user's existing Supabase org "Blogs" has 3 projects, all paused. None of them are for CoW.
 - **Icons:** import them one at a time from `phosphor-react-native/src/icons/<Name>`; a lint rule blocks root imports. `tsconfig` `paths` maps those imports to the compiled `.d.ts` files, because phosphor's own `.tsx` source fails our type check. The bundle was verified to contain the real icon code.
 - **JOIN_URL** is `#ambassador`: the site has no `#join` anchor, and its own "Join" menu link goes to `#ambassador`.
+- **How migrations were applied to dev.** The Supabase connector can't read local files, so each file is pushed to GitHub, and the database fetches it from `raw.githubusercontent.com` pinned to a commit SHA. It checks the md5 checksum before running it, so the exact committed file runs. The `http` extension is turned on only for that step and removed afterwards.
+  - Dev's migration history is out of order (100, 200, 500, 600, 300, 400, 700, 800), because the first batch was sent at once by mistake.
+  - The end result is identical to the file order. For production, apply the files in file-name order (SQL Editor, or `supabase db push`).
+- **After every migration:** regenerate the types, re-run the security tests, and check the advisor.
 - **Expo location:** on Android, `geocodeAsync` needs location permission. That's why the ZIP-centroid fallback exists.
 
 ## Waiting on (not blocking yet)
