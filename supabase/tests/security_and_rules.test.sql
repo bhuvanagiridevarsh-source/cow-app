@@ -30,7 +30,7 @@ declare
   w_end timestamptz := now() + interval '1 day 3 hours';
   item_a uuid; item_b uuid; item_c uuid; item_r uuid; item_s uuid;
   m1 uuid; m2 uuid; m3 uuid;
-  pk_a uuid; pk_b uuid; pk_c uuid; pk_s uuid;
+  pk_a uuid; pk_b uuid; pk_c uuid; pk_s uuid; item_t uuid; pk_t uuid; n3 integer;
   impact_before numeric; impact_after numeric;
   n integer; n2 integer; v_num numeric; v_text text; v_json json; v_bool boolean;
   r record;
@@ -450,6 +450,14 @@ begin
     if sqlerrm = 'COW_INVALID_TRANSITION' then passed := passed + 1; else failed := array_append(failed, 'E25 wrong error: ' || sqlerrm); end if;
   end;
 
+  -- Old declined/cancelled requests don't keep a listing visible (here: after it's withdrawn).
+  perform set_config('request.jwt.claims', json_build_object('sub', donor, 'role', 'authenticated')::text, true);
+  perform set_config('role', 'authenticated', true);
+  perform public.withdraw_item(item_c);
+  perform set_config('request.jwt.claims', json_build_object('sub', stranger2, 'role', 'authenticated')::text, true);
+  select count(*) into n from public.items where id = item_c;
+  if n = 0 then passed := passed + 1; else failed := array_append(failed, 'E26 old declined/cancelled requester still sees a withdrawn listing'); end if;
+
   -- ===========================================================================
   -- F. REPORTS AND BLOCKS
   -- ===========================================================================
@@ -499,6 +507,25 @@ begin
   select count(*) into n2 from storage.objects where bucket_id = 'item-photos' and name = donor2::text || '/testphoto0002.jpg';
   if n = 0 and v_text = 'unavailable' and n2 = 0 then passed := passed + 1;
   else failed := array_append(failed, format('F1 blocked user still sees listings=%s / request=%s / photo=%s', n, v_text, n2)); end if;
+
+  -- Blocking mid-pickup (already picked up) hides the item and its address right away.
+  perform set_config('request.jwt.claims', json_build_object('sub', donor2, 'role', 'authenticated')::text, true);
+  item_t := public.create_item('furniture', 'Lamp table', 25, 'good', donor2::text || '/testphoto0002.jpg',
+    w_start, w_end, '9 Other St', 'Monroe Township', '08831');
+  perform set_config('request.jwt.claims', json_build_object('sub', stranger2, 'role', 'authenticated')::text, true);
+  select t.pickup_id into pk_t from public.request_pickups(array[item_t], false) t;
+  perform set_config('request.jwt.claims', json_build_object('sub', donor2, 'role', 'authenticated')::text, true);
+  perform public.respond_to_request(pk_t, true);
+  perform set_config('request.jwt.claims', json_build_object('sub', stranger2, 'role', 'authenticated')::text, true);
+  perform public.mark_collected(pk_t);
+  select count(*) into n from public.item_addresses where item_id = item_t;
+  perform set_config('request.jwt.claims', json_build_object('sub', donor2, 'role', 'authenticated')::text, true);
+  perform public.block_user(stranger2);
+  perform set_config('request.jwt.claims', json_build_object('sub', stranger2, 'role', 'authenticated')::text, true);
+  select count(*) into n2 from public.item_addresses where item_id = item_t;
+  select count(*) into n3 from public.items where id = item_t;
+  if n = 1 and n2 = 0 and n3 = 0 then passed := passed + 1;
+  else failed := array_append(failed, format('F6 block mid-pickup: address before=%s after=%s, item visible=%s', n, n2, n3)); end if;
 
   -- ===========================================================================
   -- G. DELETE MY ACCOUNT
