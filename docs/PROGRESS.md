@@ -2,20 +2,17 @@
 
 > **New session?** Read these first, in order: `docs/BRIEF.md`, `docs/PLAN.md`, this file, then run `git status`. Continue from **Next step** below.
 
-_Last updated: Sep 27, 2026 (Phase 1)_
+_Last updated: Sep 27, 2026 (end of Phase 1)_
 
 ## Current phase
 
-**Phase 1: Foundation** (normal effort). The plan was approved with **"go"**, which accepted every recommended decision D1–D8 (PLAN.md §2).
-Steps 1.1–1.5 are done. Step 1.6 is built: the temporary `src/app/dev-check.tsx` screen. It's **waiting for phone check #1**.
+**Phase 1: Foundation is COMPLETE.** Next is **Phase 2: Database & security** (MAX effort).
+The plan was approved with "go", which accepted every recommended decision D1–D8 (PLAN.md §2).
 
 ## Next step
 
-1. The user signs in to Expo on the Mac (`! npx expo login`) and in Expo Go on the iPhone, with the same account.
-2. Start `npx expo start` and have the user run the "Run Expo Go check" screen, then record the results below.
-3. Drop or replace any library that fails (brief §8 rule).
-4. Delete `src/app/dev-check.tsx` and the Home button that opens it, run `npm run check`, commit, and push. That ends Phase 1.
-5. Announce Phase 2 with `⚙️ Set effort to MAX for this phase`.
+Announce Phase 2 with `⚙️ Set effort to MAX for this phase`, wait for "ready", then start step 2.1: write `docs/SAFETY_POLICY_DRAFT.md`.
+Step 2.2 creates the `cow-app-dev` Supabase project. Show the cost from `get_cost` first and get the user's OK (D1).
 
 ## Done
 
@@ -33,13 +30,14 @@ Steps 1.1–1.5 are done. Step 1.6 is built: the temporary `src/app/dev-check.ts
 - [x] 1.3 Approved libraries installed with `npx expo install`.
 - [x] 1.4 `src/theme.ts` (site colors, AA-tested in both themes), fonts, UI building blocks, the `Lamp` diya (replaces Lottie), custom tab bar, 5 tabs.
 - [x] 1.5 `src/config.ts` (brief §10), link helpers, blank-URL hiding, tests.
-- [x] 1.6 (built) haptics wrapper that can't crash, plus the temporary dev-check screen.
+- [x] 1.6 Phone check #1 done. The temporary dev-check screen was removed. The lamp flicker was made stronger after feedback.
 
 ## Facts found during research (keep in mind)
 
 - **Libraries and Expo Go**
   - `lottie-react-native` is NOT in Expo Go on SDK 57.
-  - `expo-haptics` isn't listed as included in Expo Go in the SDK 57 docs. Test it on the phone in Phase 1.
+  - `expo-haptics`: phone check #1 confirmed **no buzz in Expo Go**. The wrapper skips it safely. Re-test in a real build (Phase 9).
+  - The phone connects to the Mac's dev server only via `npx expo start --tunnel`: the Mac firewall blocks LAN connections. The user runs Expo in their own Terminal (the Claude `!` prompt can't take typed input).
 - **Testing setup**
   - This Mac has **no Xcode**, so there's no iOS simulator; phone checks are done by the user on their iPhone.
   - Expo Go on a real iPhone requires Expo Go and the Expo CLI to be signed in to the same Expo account. The CLI is currently **not logged in**.
@@ -67,4 +65,4 @@ Steps 1.1–1.5 are done. Step 1.6 is built: the temporary `src/app/dev-check.ts
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ⏳ pending | |
+| 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |

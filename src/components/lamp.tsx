@@ -40,10 +40,10 @@ export function Lamp({ size = 120, glow = 0.7, flicker = true }: Props) {
     t.set(
       withRepeat(
         withSequence(
-          withTiming(1, { duration: 700, easing: Easing.inOut(Easing.sin) }),
-          withTiming(0.3, { duration: 500, easing: Easing.inOut(Easing.sin) }),
-          withTiming(0.8, { duration: 600, easing: Easing.inOut(Easing.sin) }),
-          withTiming(0, { duration: 650, easing: Easing.inOut(Easing.sin) }),
+          withTiming(1, { duration: 450, easing: Easing.inOut(Easing.sin) }),
+          withTiming(0.2, { duration: 350, easing: Easing.inOut(Easing.sin) }),
+          withTiming(0.85, { duration: 400, easing: Easing.inOut(Easing.sin) }),
+          withTiming(0, { duration: 500, easing: Easing.inOut(Easing.sin) }),
         ),
         -1,
       ),
@@ -51,11 +51,15 @@ export function Lamp({ size = 120, glow = 0.7, flicker = true }: Props) {
   }, [animate, t]);
 
   const flameStyle = useAnimatedStyle(() => ({
-    transform: [{ scaleY: 1 + t.get() * 0.08 }, { scaleX: 1 - t.get() * 0.04 }],
+    transform: [
+      { rotate: `${(t.get() - 0.5) * 7}deg` },
+      { scaleY: 1 + t.get() * 0.2 },
+      { scaleX: 1 - t.get() * 0.1 },
+    ],
   }));
   const glowStyle = useAnimatedStyle(() => ({
-    opacity: Math.min(1, glow * (0.85 + t.get() * 0.15)),
-    transform: [{ scale: 0.9 + glow * 0.2 + t.get() * 0.03 }],
+    opacity: Math.min(1, glow * (0.6 + t.get() * 0.4)),
+    transform: [{ scale: 0.85 + glow * 0.2 + t.get() * 0.12 }],
   }));
 
   const box = { width: size, height: size };

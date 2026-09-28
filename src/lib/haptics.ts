@@ -3,6 +3,7 @@
  *
  * expo-haptics isn't listed as included in Expo Go for SDK 57, so it is loaded lazily inside
  * try/catch. If it's missing, the buzz is skipped. It can never crash the app.
+ * Phone check #1 (Sep 27, 2026): no buzz in Expo Go on iPhone. Re-check in a real build (Phase 9).
  */
 type HapticsModule = typeof import('expo-haptics');
 
@@ -18,11 +19,6 @@ function load(): HapticsModule | null {
     }
   }
   return cached;
-}
-
-/** True if the phone can buzz (used only by the dev check screen). */
-export function hapticsAvailable(): boolean {
-  return load() !== null;
 }
 
 export async function successBuzz(): Promise<void> {
