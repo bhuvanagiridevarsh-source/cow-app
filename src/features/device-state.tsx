@@ -25,6 +25,8 @@ type DeviceState = {
   updateDraft: (patch: Partial<OnboardingDraft>) => void;
   clearDraft: () => void;
   blockUntil: (date: string) => void;
+  /** Development only: lets testers undo the under-13 block on their own phone. */
+  clearAgeBlock: () => void;
   setNotice: (message: string | null) => void;
 };
 
@@ -73,6 +75,11 @@ export function DeviceStateProvider({ children }: { children: ReactNode }) {
     void writeJSON(STORAGE_KEYS.ageBlockedUntil, date);
   }, []);
 
+  const clearAgeBlock = useCallback(() => {
+    setAgeBlockedUntil(null);
+    void removeKey(STORAGE_KEYS.ageBlockedUntil);
+  }, []);
+
   const setNotice = useCallback((message: string | null) => {
     setNoticeState(message);
     if (message) void writeJSON(STORAGE_KEYS.notice, message);
@@ -80,8 +87,18 @@ export function DeviceStateProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ loaded, draft, ageBlockedUntil, notice, updateDraft, clearDraft, blockUntil, setNotice }),
-    [loaded, draft, ageBlockedUntil, notice, updateDraft, clearDraft, blockUntil, setNotice],
+    () => ({
+      loaded,
+      draft,
+      ageBlockedUntil,
+      notice,
+      updateDraft,
+      clearDraft,
+      blockUntil,
+      clearAgeBlock,
+      setNotice,
+    }),
+    [loaded, draft, ageBlockedUntil, notice, updateDraft, clearDraft, blockUntil, clearAgeBlock, setNotice],
   );
 
   return <DeviceStateContext.Provider value={value}>{children}</DeviceStateContext.Provider>;

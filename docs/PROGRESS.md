@@ -2,16 +2,18 @@
 
 > **New session?** Read these first, in order: `docs/BRIEF.md`, `docs/PLAN.md`, this file, then run `git status`. Continue from **Next step** below.
 
-_Last updated: Sep 27, 2026 (end of Phase 2)_
+_Last updated: Sep 27, 2026 (Phase 3)_
 
 ## Current phase
 
-**Phase 2: Database & security is COMPLETE.** Next is **Phase 3: Accounts & sign-in** (MAX effort).
+**Phase 3: Accounts & sign-in** (MAX effort). Steps 3.1–3.6 are built, and all 6 checks pass. It's **waiting for** the user's Supabase dashboard steps (docs/SUPABASE_SETUP.md Part B: B1–B3), then **phone check #3**.
 
 ## Next step
 
-Announce Phase 3 with `⚙️ Set effort to MAX for this phase`, wait for "ready", then start step 3.1: the Supabase client, saved sessions, and the "not set up yet" screen.
-The user will need to do some Supabase dashboard setup in step 3.6: the email template with the code, the Apple Client ID `host.exp.Exponent`, and the demo accounts.
+1. The user does SUPABASE_SETUP Part B: B1 (code email templates, OTP length 6 and expiry 900), B2 (Apple Client ID `host.exp.Exponent`), B3 (demo accounts).
+2. The user **restarts** `npx expo start --tunnel`. Restarting is needed because `.env` was created after their dev server started, and EXPO_PUBLIC_ values are read when the server starts.
+3. The user runs phone check #3 (checklist below) and reports results.
+4. Fix anything that fails. Then B4 (make the user an admin), push, and announce Phase 4 (normal effort).
 
 ## Done
 
@@ -42,6 +44,12 @@ The user will need to do some Supabase dashboard setup in step 3.6: the email te
   - API wrappers
   - the block-visibility fix
 - [x] 2.4 TypeScript types saved in `src/lib/database.types.ts`. App-side rule copies are in `src/domain/{age,zip,status}.ts`, with friendly error messages in `src/features/errors.ts`.
+- [x] 3.1 Supabase client with saved sessions; root navigator with one protected screen group per app state (status / (auth) / onboarding / (app)); a "not set up yet" screen.
+- [x] 3.2 Welcome (live impact total), neutral birthday screen before any email, and the under-13 screen with the block remembered on the device. A development-only reset exists for testers.
+- [x] 3.3 Email code sign-in (resend cooldown), the demo-account password path, and Sign in with Apple (SHA-256 nonce, iPhone only).
+- [x] 3.4 Onboarding (details, guardian for ages 13–17, Terms). `docs/TERMS.md` and `docs/PRIVACY_POLICY.md` are drafts for the board; they're synced into the app by `npm run sync-legal`, and tests guard it.
+- [x] 3.5 Me tab basics, edit profile, delete account.
+- [x] 3.6 `docs/SUPABASE_SETUP.md`, first version (Parts A and B).
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -68,6 +76,12 @@ The user will need to do some Supabase dashboard setup in step 3.6: the email te
 - **After every migration:** regenerate the types, re-run the security tests, and check the advisor.
 - **Expo location:** on Android, `geocodeAsync` needs location permission. That's why the ZIP-centroid fallback exists.
 
+## Open items found in Phase 3
+
+- **Sign in with Apple token revocation.** Apple says apps "should" revoke Sign in with Apple tokens when an account is deleted. That needs a server-side Apple key and an Edge Function. It isn't built yet; add it to LAUNCH_CHECKLIST as a known item.
+- **Leftover empty logins.** If an under-13 sign-in happens while offline, an empty login (email only, no profile) may remain. Plan: add an `admin.cleanup_unfinished_signups()` command and document it in ADMIN_GUIDE (Phase 9).
+- **Typed routes.** Route types are generated only by the dev server (`.expo/types`). On a fresh clone, route checking is relaxed until `npx expo start` runs once.
+
 ## Waiting on (not blocking yet)
 
 - [ ] High-res logo, 1024×1024+ (needed in Phase 9)
@@ -81,4 +95,5 @@ The user will need to do some Supabase dashboard setup in step 3.6: the email te
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 3 | Accounts: email code, Apple, age gate, onboarding, delete | ⏳ pending | See checklist in the chat / below |
 | 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |
