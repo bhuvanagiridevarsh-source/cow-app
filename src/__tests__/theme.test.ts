@@ -23,6 +23,8 @@ const pairs: Pair[] = [
   ['onAction', 'action', AA],
   ['onSuccess', 'success', AA],
   ['onDanger', 'danger', AA],
+  ['danger', 'background', AA],
+  ['danger', 'surface', AA],
   ['highlightText', 'highlightBg', AA_LARGE],
 ];
 

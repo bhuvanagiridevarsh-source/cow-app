@@ -44,3 +44,21 @@ export function birthYearOptions(today: YearMonth): number[] {
   for (let y = today.year; y >= today.year - 100; y--) years.push(y);
   return years;
 }
+
+/**
+ * When an under-13 visitor may try again: the first day of the month after they turn 13
+ * (the same moment minAge() starts counting them as 13). Returned as 'YYYY-MM-DD'.
+ */
+export function ageBlockedUntil(birthYear: number, birthMonth: number): string {
+  const month = birthMonth === 12 ? 1 : birthMonth + 1;
+  const year = birthYear + MIN_ACCOUNT_AGE + (birthMonth === 12 ? 1 : 0);
+  return `${year}-${String(month).padStart(2, '0')}-01`;
+}
+
+/** True while an age block saved on this phone is still in effect. */
+export function isAgeBlocked(blockedUntil: string | null, now: Date = new Date()): boolean {
+  if (!blockedUntil) return false;
+  const [y, m, d] = blockedUntil.split('-').map(Number);
+  if (!y || !m || !d) return false;
+  return now < new Date(y, m - 1, d);
+}

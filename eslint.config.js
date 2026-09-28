@@ -6,6 +6,13 @@ module.exports = defineConfig([
   globalIgnores(['.export-check/*', '.expo/*', 'dist/*', 'reference/*']),
   expoConfig,
   {
+    // Helper scripts run in Node (e.g. npm run sync-legal).
+    files: ['scripts/**/*.js'],
+    languageOptions: {
+      globals: { __dirname: 'readonly', require: 'readonly', module: 'writable', process: 'readonly', console: 'readonly' },
+    },
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
       // Import icons one at a time (phosphor-react-native/src/icons/<Name>) so the app

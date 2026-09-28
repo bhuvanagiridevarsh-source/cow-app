@@ -56,6 +56,23 @@ export const PRIVACY_POLICY_URL = '';
 // TODO(Devarsh): add once the Terms of Use are posted on the website.
 export const TERMS_URL = '';
 
+/**
+ * Demo and test accounts that sign in with a PASSWORD instead of an emailed code.
+ * Why: App Store reviewers can't receive our codes, and Apple requires a working demo account.
+ * Create each one in Supabase: Authentication -> Users -> Add user -> Create new user,
+ * with "Auto Confirm User" checked (see docs/SUPABASE_SETUP.md). Passwords never go in this repo.
+ */
+export const PASSWORD_SIGN_IN_EMAILS: readonly string[] = [
+  'demo.donor@childrenofwarproject.org',
+  'demo.volunteer@childrenofwarproject.org',
+];
+
+/**
+ * Digits in the emailed sign-in code. Must match Supabase:
+ * Authentication -> Sign In / Providers -> Email -> "Email OTP Length" (set it to 6).
+ */
+export const OTP_LENGTH = 6;
+
 /** App Store / Play Store app IDs (also set in app.json). */
 export const IOS_BUNDLE_ID = 'org.childrenofwarproject.app';
 export const ANDROID_PACKAGE = 'org.childrenofwarproject.app';

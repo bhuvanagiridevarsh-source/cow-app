@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { usePalette } from '@/hooks/use-theme';
@@ -10,17 +10,31 @@ type Props = {
   /** Set false for screens that manage their own list scrolling. */
   scroll?: boolean;
   contentStyle?: ViewStyle;
+  /** Forms: keep the focused field above the keyboard. */
+  keyboard?: boolean;
 };
 
 /** Standard page: safe-area padding, brand background, optional scrolling. */
-export function Screen({ children, scroll = true, contentStyle }: Props) {
+export function Screen({ children, scroll = true, contentStyle, keyboard = false }: Props) {
   const p = usePalette();
+  const body = scroll ? (
+    <ScrollView
+      contentContainerStyle={[styles.content, contentStyle]}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive">
+      {children}
+    </ScrollView>
+  ) : (
+    <View style={[styles.content, styles.fill, contentStyle]}>{children}</View>
+  );
   return (
     <SafeAreaView edges={['top']} style={[styles.root, { backgroundColor: p.background }]}>
-      {scroll ? (
-        <ScrollView contentContainerStyle={[styles.content, contentStyle]}>{children}</ScrollView>
+      {keyboard ? (
+        <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+          {body}
+        </KeyboardAvoidingView>
       ) : (
-        <View style={[styles.content, styles.fill, contentStyle]}>{children}</View>
+        body
       )}
     </SafeAreaView>
   );

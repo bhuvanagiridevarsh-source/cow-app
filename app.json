@@ -7,10 +7,14 @@
     "icon": "./assets/brand/cow-logo-256.png",
     "scheme": "cowproject",
     "userInterfaceStyle": "automatic",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "ios": {
       "bundleIdentifier": "org.childrenofwarproject.app",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "usesAppleSignIn": true
     },
     "android": {
       "package": "org.childrenofwarproject.app",
@@ -22,6 +26,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-apple-authentication",
       [
         "expo-splash-screen",
         {
