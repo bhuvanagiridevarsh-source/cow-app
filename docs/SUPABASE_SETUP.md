@@ -25,6 +25,26 @@ This guide has three parts:
 
 Open the project dashboard: **https://supabase.com/dashboard/project/uhmwcvkgwlpejcdvudun**
 
+### B0. Connect an email service (needed before templates can be edited)
+
+Supabase only lets you edit email templates after a custom email service (SMTP) is connected. For testing, a Gmail account works. At launch, use CoW's own email (see Part C).
+
+1. Get a Gmail **app password**:
+   - Go to **myaccount.google.com/apppasswords**. If Google says it's unavailable, first turn on **2-Step Verification** under Security.
+   - Name it "CoW Supabase" and click **Create**.
+   - Copy the 16-letter password. Don't put it in any project file or chat.
+2. In Supabase, go to **Authentication → Emails → SMTP Settings** (or click **Set up SMTP** on a template page) and fill in:
+   - **Enable custom SMTP:** on
+   - **Sender email:** the Gmail address
+   - **Sender name:** `CoW`
+   - **Host:** `smtp.gmail.com`
+   - **Port:** `587`
+   - **Username:** the Gmail address
+   - **Password:** the 16-letter app password
+
+   Then click **Save**.
+3. Once this is connected, codes can go to any email address, not just Supabase team members. Gmail allows about 500 emails a day, which is plenty for testing and a small launch.
+
 ### B1. Make the sign-in email show a 6-digit code
 
 The app asks people to type a code, so the emails must contain the code instead of a link.
@@ -47,7 +67,7 @@ The app asks people to type a code, so the emails must contain the code instead 
 
    Then click **Save**.
 
-> **Important while testing:** until CoW connects a real email service (see Part C), Supabase only emails people who are **members of your Supabase team**. Use the email address you log in to Supabase with. For a second person, use the demo accounts from B3.
+> Without B0, Supabase only emails **members of your Supabase team**, and the emails contain a link instead of a code. The app needs the code.
 
 ### B2. Turn on Sign in with Apple (for testing in Expo Go)
 
