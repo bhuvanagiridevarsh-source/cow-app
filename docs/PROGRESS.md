@@ -2,15 +2,20 @@
 
 > **New session?** Read these first, in order: `docs/BRIEF.md`, `docs/PLAN.md`, this file, then run `git status`. Continue from **Next step** below.
 
-_Last updated: Sep 27, 2026_
+_Last updated: Sep 27, 2026 (Phase 1)_
 
 ## Current phase
 
-**Phase 0: Plan.** `docs/PLAN.md` is written and waiting for the user's **"go"**. Saying "go" also accepts the recommended default for every decision (D1–D8) in PLAN.md §2 unless the user changes one.
+**Phase 1: Foundation** (normal effort). The plan was approved with **"go"**, which accepted every recommended decision D1–D8 (PLAN.md §2).
+Steps 1.1–1.5 are done. Step 1.6 is built: the temporary `src/app/dev-check.tsx` screen. It's **waiting for phone check #1**.
 
 ## Next step
 
-After "go": announce **Phase 1: Foundation** with `⚙️ Normal effort is fine for this phase`, wait for "ready", then start step 1.1.
+1. The user signs in to Expo on the Mac (`! npx expo login`) and in Expo Go on the iPhone, with the same account.
+2. Start `npx expo start` and have the user run the "Run Expo Go check" screen, then record the results below.
+3. Drop or replace any library that fails (brief §8 rule).
+4. Delete `src/app/dev-check.tsx` and the Home button that opens it, run `npm run check`, commit, and push. That ends Phase 1.
+5. Announce Phase 2 with `⚙️ Set effort to MAX for this phase`.
 
 ## Done
 
@@ -22,7 +27,13 @@ After "go": announce **Phase 1: Foundation** with `⚙️ Normal effort is fine 
   - Expo Go / SDK 57 library support
   - Supabase auth, storage, and free-plan limits
   - brand colors taken from the site's stylesheet
-- [x] `docs/PLAN.md` written.
+- [x] `docs/PLAN.md` written and approved.
+- [x] 1.1 Starter demo removed, app identity set (`app.json`), `.env.example` added.
+- [x] 1.2 ESLint + Jest set up. `npm run check` runs all 6 brief gates.
+- [x] 1.3 Approved libraries installed with `npx expo install`.
+- [x] 1.4 `src/theme.ts` (site colors, AA-tested in both themes), fonts, UI building blocks, the `Lamp` diya (replaces Lottie), custom tab bar, 5 tabs.
+- [x] 1.5 `src/config.ts` (brief §10), link helpers, blank-URL hiding, tests.
+- [x] 1.6 (built) haptics wrapper that can't crash, plus the temporary dev-check screen.
 
 ## Facts found during research (keep in mind)
 
@@ -39,6 +50,8 @@ After "go": announce **Phase 1: Foundation** with `⚙️ Normal effort is fine 
   - Storage files must be deleted through the Storage API, not SQL.
   - Free projects pause after 7 days of low activity (restorable for 90 days).
   - The user's existing Supabase org "Blogs" has 3 projects, all paused. None of them are for CoW.
+- **Icons:** import them one at a time from `phosphor-react-native/src/icons/<Name>`; a lint rule blocks root imports. `tsconfig` `paths` maps those imports to the compiled `.d.ts` files, because phosphor's own `.tsx` source fails our type check. The bundle was verified to contain the real icon code.
+- **JOIN_URL** is `#ambassador`: the site has no `#join` anchor, and its own "Join" menu link goes to `#ambassador`.
 - **Expo location:** on Android, `geocodeAsync` needs location permission. That's why the ZIP-centroid fallback exists.
 
 ## Waiting on (not blocking yet)
@@ -54,4 +67,4 @@ After "go": announce **Phase 1: Foundation** with `⚙️ Normal effort is fine 
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| — | — | — | none yet |
+| 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ⏳ pending | |
