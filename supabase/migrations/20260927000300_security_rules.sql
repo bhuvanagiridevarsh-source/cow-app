@@ -98,7 +98,10 @@ security definer
 set search_path = ''
 as $$
   select coalesce(p_zip, '') ~ '^[0-9]{5}$'
-     and left(p_zip, 3) = any ((select allowed_zip_prefixes from public.settings where id));
+     and exists (
+       select 1 from public.settings s
+       where s.id and left(p_zip, 3) = any (s.allowed_zip_prefixes)
+     );
 $$;
 
 -- How many pickups a volunteer has in progress (counts toward their limit).
