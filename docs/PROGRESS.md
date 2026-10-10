@@ -2,18 +2,19 @@
 
 > **New session?** Read these first, in order: `docs/BRIEF.md`, `docs/PLAN.md`, this file, then run `git status`. Continue from **Next step** below.
 
-_Last updated: Sep 27, 2026 (Phase 3)_
+_Last updated: Oct 9, 2026 (Phase 3)_
 
 ## Current phase
 
-**Phase 3: Accounts & sign-in** (MAX effort). Steps 3.1–3.6 are built, and all 6 checks pass. It's **waiting for** the user's Supabase dashboard steps (docs/SUPABASE_SETUP.md Part B: B1–B3), then **phone check #3**.
+**Phase 3: Accounts & sign-in** (MAX effort). Steps 3.1–3.6 are built. Supabase dashboard setup (SUPABASE_SETUP Part B: B0–B4) is **done**: the two demo accounts exist, and the user's own account signed in with an email code, finished onboarding, and is an admin. It's **waiting for** the rest of **phone check #3** (checklist at the bottom).
+
+**One check is failing (Oct 9):** `expo-doctor` reports 4 Expo packages one patch behind (expo, expo-constants, expo-linking, expo-router). The other five checks pass (115 unit tests). Fix: `npx expo install --fix`, then re-run `npm run check`. Phase 3 can't close until this passes.
 
 ## Next step
 
-1. The user does SUPABASE_SETUP Part B: B1 (code email templates, OTP length 6 and expiry 900), B2 (Apple Client ID `host.exp.Exponent`), B3 (demo accounts).
-2. The user **restarts** `npx expo start --tunnel`. Restarting is needed because `.env` was created after their dev server started, and EXPO_PUBLIC_ values are read when the server starts.
-3. The user runs phone check #3 (checklist below) and reports results.
-4. Fix anything that fails. Then B4 (make the user an admin), push, and announce Phase 4 (normal effort).
+1. Run `npx expo install --fix`, re-run `npm run check`, commit.
+2. The user finishes phone check #3 (checklist at the bottom) and reports ✓ or ✗ per line.
+3. Fix anything that fails. Then push and announce Phase 4 (normal effort).
 
 ## Done
 
@@ -95,5 +96,19 @@ _Last updated: Sep 27, 2026 (Phase 3)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 3 | Accounts: email code, Apple, age gate, onboarding, delete | ⏳ pending | See checklist in the chat / below |
+| 3 | Accounts: email code, Apple, age gate, onboarding, delete | ⏳ in progress | Email code + onboarding ✓ (seen in the database, Oct 9). The rest is pending; see the checklist below. |
 | 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |
+
+### Phone check #3 checklist
+
+Start with `npx expo start --tunnel` in your own Terminal. Reply with ✓ or ✗ for each line.
+
+1. **Email code.** Sign in with your own email; a 6-digit code arrives and works. (Already seen working on Oct 9.)
+2. **Stay signed in.** Close Expo Go fully and reopen the app: you land on Home, not Welcome.
+3. **Edit profile.** Me → Edit profile: change your name or ZIP, save, and see the change.
+4. **Legal pages.** Me → Terms of Use and Privacy Policy both open and scroll.
+5. **Sign out.** Me → Sign out returns you to Welcome.
+6. **Under 13.** On the birthday screen pick a date that makes you 12: you get the friendly stop screen and are never asked for an email. Then tap "Developer only: reset the age check".
+7. **Demo donor + guardian.** Enter `demo.donor@childrenofwarproject.org`: a password box appears instead of "Send code". Sign in, choose a birth date that makes you 15, and confirm the parent/guardian screen appears before Terms.
+8. **Sign in with Apple.** Sign out, tap Sign in with Apple, and finish onboarding.
+9. **Delete account.** Signed in with the Apple account from line 8: Me → Delete account → "Yes, delete everything". You return to Welcome. (Don't delete your own admin account, or B4 has to be redone.)
