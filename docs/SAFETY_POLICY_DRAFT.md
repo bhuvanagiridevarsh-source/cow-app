@@ -38,7 +38,9 @@
 | Maximum active listings per donor | **10** | `max_active_listings_per_donor` |
 
 - **The exact address is shown only to the one volunteer the donor accepts, and only until the pickup is done.** Everyone else sees only the town and an approximate distance.
-- Photos are re-saved on the phone before upload. This removes hidden GPS data that could reveal a home address.
+- Photos are re-saved on the phone before upload. This removes hidden GPS data that could reveal a home address. The app checks each photo and refuses to upload one that still has it.
+- **Nobody using the app can tell who is under 18.** A listing doesn't show that its donor is a minor, and a donor isn't told that a volunteer is a minor. The "an adult will be home" and "an adult will come with me" confirmations are recorded, and only CoW's admins can see them.
+- **Addresses are never saved on a volunteer's phone.** A volunteer with no signal can't reopen an address unless that screen was already open.
 
 ## 4. Service area
 
@@ -61,5 +63,7 @@
 5. **Who are the admins**, and how quickly will reports be reviewed?
 6. Does CoW need **insurance or a liability waiver** for pickups? *Recommend asking an attorney. Two Board members, Lata Setty and Prema Roddam, are attorneys.*
 7. Should a guardian get an **email** when their teen signs up? This isn't built in the first version, but it could be added.
+8. Should a donor be **told that an under-18 volunteer is bringing an adult**? Today they are not, so that nobody can pick out minors. The Board may prefer that donors know.
+9. Should an accepted pickup's **address be saved on the volunteer's phone** so it works with no signal? Today it is not, to protect donors.
 
-_Draft prepared Sep 27, 2026 alongside the app build. Once decided, send the answers to the app developer. Most changes are a single setting._
+_Draft prepared Sep 27, 2026 alongside the app build, and updated Oct 10, 2026 after the final review. Once decided, send the answers to the app developer. Most changes are a single setting._

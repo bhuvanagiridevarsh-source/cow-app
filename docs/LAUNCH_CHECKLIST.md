@@ -112,6 +112,20 @@ Install it on a test iPhone and check these. They could not be tested in Expo Go
 
 Then the same on an Android phone: `eas build --profile preview --platform android`.
 
+### One more check on a real photo
+
+The app re-saves every photo and refuses to upload one that still carries hidden location data. To confirm that independently, once, on a real upload:
+
+1. In Supabase: **Storage → item-photos**, open any folder, and download one photo taken with the phone's camera.
+2. On a Mac, select the file in Finder and press **Cmd+I**. Under **More Info** there must be **no Latitude or Longitude**.
+
+### Technical notes for the developer
+
+- **Library warnings.** `npm audit` reports known issues in the tools that build the app (Expo's command line, Metro, Jest, React DevTools). Those tools run on the developer's computer and are not part of the app people install. One low-risk item does ship: the navigation library's web-address reader can be slowed down by a deliberately malformed link, which would only freeze the app for the person who tapped that link. The fix arrives with the next Expo SDK. **Do not run `npm audit fix --force`:** it would downgrade Expo and React Native and break the app. Re-check after each SDK upgrade.
+- **Android permissions.** Before the Android release, look at the permissions Play Console lists for the build. Expected: internet, camera, location, and vibrate. Expo's template also declares "display over other apps" and old-Android storage access, which the app doesn't need. If Play flags them, remove them with `android.blockedPermissions` in `app.json` and re-test photos and the developer menu.
+- **Android cloud backup is off** (`android.allowBackup: false` in `app.json`), so a saved sign-in is never copied to a Google account backup.
+- **iPhone permission messages.** Every message in `app.json` says exactly what the permission is for. Two of them (always-on location and motion) exist only because Apple requires a message for anything a built-in library could ask for; the app never asks for either.
+
 ---
 
 ## 7. App Store Connect

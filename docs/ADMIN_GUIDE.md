@@ -66,6 +66,8 @@ select admin.resolve_report('REPORT-ID', 'Removed the listing');
 select admin.resolve_report('REPORT-ID', 'Not a problem', 'dismissed');
 ```
 
+The note you write is private. The person who sent the report can see that it was closed, but not your note.
+
 The `ITEM-ID` and `REPORT-ID` are the long codes in the `item_id` and `report_id` columns. Copy and paste them.
 
 ### Listings hidden automatically

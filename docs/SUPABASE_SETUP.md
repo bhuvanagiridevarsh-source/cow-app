@@ -104,7 +104,7 @@ Neither email needs a real inbox, because no email is ever sent to them.
 
 ### B5. (Optional) Re-run the security tests
 
-In **SQL Editor**, paste the whole file `supabase/tests/security_and_rules.test.sql` and click **Run**. The expected result is a message starting with **ALL 78 TESTS PASSED**. It shows as a red error on purpose, because that's how the test cleans up after itself.
+In **SQL Editor**, paste the whole file `supabase/tests/security_and_rules.test.sql` and click **Run**. The expected result is a message starting with **ALL 83 TESTS PASSED**. It shows as a red error on purpose, because that's how the test cleans up after itself.
 
 ---
 
@@ -130,7 +130,7 @@ One file (`…000200_zip_centroids_seed.sql`) is large. If the editor struggles,
 
 ### C3. Prove the privacy rules work
 
-1. In **SQL Editor**, paste the whole file `supabase/tests/security_and_rules.test.sql` and click **Run**. The expected result starts with **ALL 78 TESTS PASSED**. It shows as a red error on purpose; that's how the test undoes itself.
+1. In **SQL Editor**, paste the whole file `supabase/tests/security_and_rules.test.sql` and click **Run**. The expected result starts with **ALL 83 TESTS PASSED**. It shows as a red error on purpose; that's how the test undoes itself.
 2. Open **Advisors → Security Advisor**. It should list no errors.
    - It may show a warning named **"Leaked Password Protection Disabled."** Only the two demo accounts use passwords. Turn the protection on under **Authentication → Sign In / Providers → Email** if your plan offers it; otherwise give the demo accounts long, random passwords.
 

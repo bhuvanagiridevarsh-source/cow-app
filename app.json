@@ -26,7 +26,8 @@
         "monochromeImage": "./assets/brand/adaptive-monochrome.png",
         "backgroundColor": "#FFF6DC"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "allowBackup": false
     },
     "plugins": [
       "expo-router",
@@ -44,6 +45,8 @@
         {
           "locationWhenInUsePermission": "CoW uses your location to show donated items near you. It stays on your phone.",
           "locationAlwaysAndWhenInUsePermission": "CoW uses your location to show donated items near you. It stays on your phone.",
+          "locationAlwaysPermission": "CoW uses your location to show donated items near you. It stays on your phone.",
+          "motionUsagePermission": "CoW does not use your motion or fitness activity.",
           "isIosBackgroundLocationEnabled": false,
           "isAndroidBackgroundLocationEnabled": false
         }

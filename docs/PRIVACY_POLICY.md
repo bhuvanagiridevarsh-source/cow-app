@@ -33,6 +33,7 @@ We use your information only to run the app: to sign you in, show listings, arra
 
 - Your email, birthday, ZIP code, and guardian details are private. Only you and CoW admins can see them.
 - Other people see only your first name and last initial, and only when you are on a pickup together.
+- Other people using the app can't see your age or whether you are under 18. If you are under 18, the app asks you to confirm that an adult will be present; only CoW admins can see that answer.
 - Listings show the town and an approximate distance. The exact address is shown only to the one volunteer the donor accepts, and only until the pickup is finished.
 - Item photos can be seen by signed-in people who can see that listing.
 

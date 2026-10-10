@@ -1,7 +1,22 @@
 # CoW App — Build Plan (V1)
 
-> **Status: DRAFT — waiting for your "go."**
-> Written Sep 27, 2026. The source of truth is [`docs/BRIEF.md`](BRIEF.md). Day-to-day progress is in [`docs/PROGRESS.md`](PROGRESS.md).
+> **Status: approved Sep 27, 2026, and built.** All 10 phases are done as of Oct 10, 2026.
+> The source of truth is [`docs/BRIEF.md`](BRIEF.md). Day-to-day progress is in [`docs/PROGRESS.md`](PROGRESS.md).
+>
+> This is the plan as it was approved. Where the finished app differs, the list below says how.
+
+## What changed while building
+
+- **No address lookup.** A listing's approximate location comes from its ZIP code only. The app never asks a donor for location permission and never sends an address to a maps service to look it up. (§6 mentions an optional exact location; the app doesn't send one.)
+- **Every item has a short name** ("What is it?"), asked in step 2 of listing. The database needs it.
+- **Colors.** `muted` and `blueText` were darkened slightly in Phase 8 to pass contrast on tinted cards (the table in §8 shows the final values).
+- **Offline.** Saved data never includes exact addresses, the phone's location, or photo links, and it is erased on sign-out.
+- **The age question and email (§7).** Email sign-in now cannot create a login, or send any email, for an address the app doesn't know unless the age question was already answered on that phone. Sign in with Apple can still create a login first; the age question follows at once, and an under-13 login is deleted immediately.
+- **Minors stay unidentifiable (§6, §7).** `items.adult_home_confirmed` and `pickups.adult_attending` are recorded but cannot be read through the app, and donors are not told that a volunteer is under 18. `reports.admin_notes` is private too.
+- **Sign in with Apple** could not be tested in Expo Go on the test iPhone and is untested until a real build.
+- **The report sheet** is a full screen, not a bottom sheet. Filters use the bottom sheet.
+- **Admin cleanup.** `admin.cleanup_unfinished_signups()` was added for logins that never finished sign-up.
+- **Database tests:** 83, up from the 78 written in Phase 2.
 
 ---
 
