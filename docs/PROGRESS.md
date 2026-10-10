@@ -6,14 +6,17 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 9: Icon, splash, store setup & docs** (normal effort). Steps 9.1–9.3 are built and pushed, and all 6 checks pass (258 unit tests). It's **waiting for** the user to look at the icon and say whether it's good to take to CoW for approval (phone check #9, below).
+**Phase 10: Final pre-submission review** (**MAX effort**). Not started: waiting for the user to set effort to MAX and say "ready."
+
+Phase 9 closed on Oct 10: the user judged the icon good enough to take to CoW for approval, and the app still runs in Expo Go. All 6 checks pass (258 unit tests).
 
 ## Next step
 
-1. The user reviews the icon and splash (phone check #9) and skims the new guides.
-2. Then push anything changed and announce Phase 10, the final pre-submission review (**MAX effort**).
-
-**Not re-run this phase:** the 78 database security tests. The one new migration only adds an admin command; it was tested on its own (below). Phase 10 re-runs the full suite.
+1. The user says "ready" for Phase 10.
+2. Step 10.1: all six checks from a fresh clone of the repo.
+3. Step 10.2: re-run the 78 database security tests against dev and check the Security Advisor.
+4. Step 10.3: walk through the brief's §12 Definition of Done with the user and fix anything wrong.
+5. Step 10.4: a full security, privacy, and brief-compliance review of the code and docs.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -122,7 +125,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 9 | Icon, splash, store setup & docs | ⏳ pending | See below |
+| 9 | Icon, splash, store setup & docs | ✅ passed | Icon judged good enough to take to CoW for approval; the app still runs in Expo Go. The real icon and launch screen need a preview build to check on a phone. |
 | 8 | Offline, accessibility & polish | ✅ passed | The user reported all good. |
 | 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
 | 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
