@@ -8,13 +8,12 @@ _Last updated: Oct 9, 2026 (Phase 3)_
 
 **Phase 3: Accounts & sign-in** (MAX effort). Steps 3.1–3.6 are built. Supabase dashboard setup (SUPABASE_SETUP Part B: B0–B4) is **done**: the two demo accounts exist, and the user's own account signed in with an email code, finished onboarding, and is an admin. It's **waiting for** the rest of **phone check #3** (checklist at the bottom).
 
-**One check is failing (Oct 9):** `expo-doctor` reports 4 Expo packages one patch behind (expo, expo-constants, expo-linking, expo-router). The other five checks pass (115 unit tests). Fix: `npx expo install --fix`, then re-run `npm run check`. Phase 3 can't close until this passes.
+All 6 checks pass (Oct 9, 115 unit tests), after `npx expo install --fix` brought 4 Expo packages up to the SDK's current patch versions.
 
 ## Next step
 
-1. Run `npx expo install --fix`, re-run `npm run check`, commit.
-2. The user finishes phone check #3 (checklist at the bottom) and reports ✓ or ✗ per line.
-3. Fix anything that fails. Then push and announce Phase 4 (normal effort).
+1. The user **restarts** `npx expo start --tunnel` (packages were updated while it was running), then finishes phone check #3 (checklist at the bottom) and reports ✓ or ✗ per line.
+2. Fix anything that fails. Then push and announce Phase 4 (normal effort).
 
 ## Done
 
