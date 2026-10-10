@@ -45,3 +45,4 @@ yarn-error.*
 
 # quality-gate export output
 .export-check/
+.gstack/
