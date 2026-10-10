@@ -6,14 +6,20 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 10: Final pre-submission review** (MAX effort). Steps 10.1, 10.2, and 10.4 are done and pushed. Step 10.3 (the Definition of Done walkthrough) is **waiting for the user's five checks** in "Phone check #10" at the bottom.
+**V1 is built. All 10 phases are complete** (Oct 10, 2026). The brief's Definition of Done (§12) is met for everything that can be checked in Expo Go.
 
-All 6 checks pass on the user's Mac and on a brand-new copy cloned from GitHub (266 unit tests). All 83 database security tests pass against cow-app-dev.
+All 6 checks pass on the user's Mac and on a brand-new copy cloned from GitHub (266 unit tests). All 83 database security tests pass against cow-app-dev. The user confirmed phone check #10.
 
 ## Next step
 
-1. The user runs phone check #10 (bottom of this file) and reports.
-2. Fix anything that fails. Then V1 is code-complete, and what remains is `docs/LAUNCH_CHECKLIST.md` (accounts, board review, production database, first real build).
+There is no more planned build work. What remains is launch work, in `docs/LAUNCH_CHECKLIST.md`:
+
+1. **CoW's adults:** enroll in the Apple Developer Program and Google Play as an organization (slow; start now). Review `SAFETY_POLICY_DRAFT.md`, `TERMS.md`, and `PRIVACY_POLICY.md`. Approve the icon or supply a 1024×1024 logo. Say who manages the website's domain.
+2. **Devarsh:** fill in the pending values in `src/config.ts` (the Zeffy link first), and post the Privacy Policy and Terms on the website.
+3. **With the Apple account:** create the production Supabase project (`SUPABASE_SETUP.md` Part C), make the first preview build, and run the checks Expo Go couldn't do: Sign in with Apple, the success buzz, the real icon and launch screen.
+4. **Before submitting:** build Apple sign-in token revocation (see "Open items"), and run the phone checklists on a real Android phone before the Android release.
+
+If a new session picks this up, start from the user's request; this file and `LAUNCH_CHECKLIST.md` say what is open.
 
 ## Phase 10 findings (all fixed unless marked open)
 
@@ -99,7 +105,7 @@ All 6 checks pass on the user's Mac and on a brand-new copy cloned from GitHub (
 - [x] 10.1 Six checks from a fresh clone: found and fixed one failure; now pass (commit b7e5501 and later).
 - [x] 10.2 Database security tests re-run against dev: 83/83. Advisor checked.
 - [x] 10.4 Security, privacy, and brief-compliance review: see "Phase 10 findings" above.
-- [ ] 10.3 Definition of Done walkthrough with the user (phone check #10).
+- [x] 10.3 Definition of Done walkthrough with the user (phone check #10): all five checks passed.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -147,7 +153,7 @@ All 6 checks pass on the user's Mac and on a brand-new copy cloned from GitHub (
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 10 | Final review: Definition of Done | ⏳ pending | See below |
+| 10 | Final review: Definition of Done | ✅ passed | The app works after the database fix, unknown emails are refused before the age question, no console warnings reported, the TiE link opens, and a real uploaded photo has no hidden location. |
 | 9 | Icon, splash, store setup & docs | ✅ passed | Icon judged good enough to take to CoW for approval; the app still runs in Expo Go. The real icon and launch screen need a preview build to check on a phone. |
 | 8 | Offline, accessibility & polish | ✅ passed | The user reported all good. |
 | 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
@@ -282,11 +288,11 @@ The real icon and launch screen are checked on a phone with the first preview bu
 | Brief §12 line | Status |
 |---|---|
 | All quality gates pass on a clean clone | ✅ Verified from a fresh GitHub clone |
-| Runs in Expo Go on iPhone with no warnings in the console | ⏳ User check 3 below |
-| Full loop with two real test accounts | ✅ Phone check #6. Re-check quickly after the database change (user check 1) |
+| Runs in Expo Go on iPhone with no warnings in the console | ✅ Reported by the user, Oct 10 |
+| Full loop with two real test accounts | ✅ Phone check #6; the app was re-checked after the Phase 10 database change |
 | The RLS test plan passes | ✅ 83/83 on Oct 10 |
 | Airplane mode: opens, shows saved content, friendly message, no crash | ✅ Phone check #8 |
-| Every link works or is hidden; VoiceOver reaches every button | ✅ Links checked automatically (user check 4 for tie.org); VoiceOver in phone check #8 |
+| Every link works or is hidden; VoiceOver reaches every button | ✅ Links checked automatically, and tie.org by the user; VoiceOver in phone check #8 |
 | Every doc in §11 exists in plain English | ✅ |
 
 Shake the phone and tap Reload first. The database changed, so an app that isn't reloaded will show errors.
