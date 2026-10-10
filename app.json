@@ -4,7 +4,7 @@
     "slug": "cow-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/brand/cow-logo-256.png",
+    "icon": "./assets/brand/icon.png",
     "scheme": "cowproject",
     "userInterfaceStyle": "automatic",
     "platforms": [
@@ -14,13 +14,17 @@
     "ios": {
       "bundleIdentifier": "org.childrenofwarproject.app",
       "supportsTablet": false,
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "org.childrenofwarproject.app",
       "adaptiveIcon": {
-        "backgroundColor": "#7ABAE6",
-        "foregroundImage": "./assets/brand/cow-logo-256.png"
+        "foregroundImage": "./assets/brand/adaptive-foreground.png",
+        "monochromeImage": "./assets/brand/adaptive-monochrome.png",
+        "backgroundColor": "#FFF6DC"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -48,11 +52,11 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#FFF6DC",
-          "image": "./assets/brand/cow-logo-256.png",
-          "imageWidth": 160,
+          "image": "./assets/brand/splash.png",
+          "imageWidth": 200,
           "dark": {
             "backgroundColor": "#0B1F2E",
-            "image": "./assets/brand/cow-logo-256.png"
+            "image": "./assets/brand/splash.png"
           }
         }
       ]

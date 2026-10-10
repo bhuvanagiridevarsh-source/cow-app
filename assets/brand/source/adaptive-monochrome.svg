@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><defs>
+  <radialGradient id="glow" cx="60" cy="40" r="46" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFE082" stop-opacity="0.95"/><stop offset="0.55" stop-color="#FFCA28" stop-opacity="0.35"/><stop offset="1" stop-color="#FFCA28" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="warm" cx="512" cy="430" r="620" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFE68A"/><stop offset="0.45" stop-color="#FFF1C2"/><stop offset="1" stop-color="#FFF6DC"/>
+  </radialGradient>
+  <linearGradient id="stripes" x1="16" y1="0" x2="104" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0.0000" stop-color="#F8BBD0"/><stop offset="0.1667" stop-color="#F8BBD0"/><stop offset="0.1667" stop-color="#FFE0B2"/><stop offset="0.3333" stop-color="#FFE0B2"/><stop offset="0.3333" stop-color="#FFF59D"/><stop offset="0.5000" stop-color="#FFF59D"/><stop offset="0.5000" stop-color="#C5E1A5"/><stop offset="0.6667" stop-color="#C5E1A5"/><stop offset="0.6667" stop-color="#B3E5FC"/><stop offset="0.8333" stop-color="#B3E5FC"/><stop offset="0.8333" stop-color="#D1C4E9"/><stop offset="1.0000" stop-color="#D1C4E9"/></linearGradient>
+</defs><g transform="translate(218.00 237.80) scale(4.9)"><path d="M60 12 C71 29 78 40 73 51 C69 58 51 58 47 51 C42 40 49 29 60 12 Z" fill="#FFFFFF"/><path d="M14.5 62 H105.5 C105.5 87 85 105.5 60 105.5 C35 105.5 14.5 87 14.5 62 Z" fill="#FFFFFF"/></g></svg>

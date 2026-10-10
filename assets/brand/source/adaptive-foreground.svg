@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><defs>
+  <radialGradient id="glow" cx="60" cy="40" r="46" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFE082" stop-opacity="0.95"/><stop offset="0.55" stop-color="#FFCA28" stop-opacity="0.35"/><stop offset="1" stop-color="#FFCA28" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="warm" cx="512" cy="430" r="620" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFE68A"/><stop offset="0.45" stop-color="#FFF1C2"/><stop offset="1" stop-color="#FFF6DC"/>
+  </radialGradient>
+  <linearGradient id="stripes" x1="16" y1="0" x2="104" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0.0000" stop-color="#F8BBD0"/><stop offset="0.1667" stop-color="#F8BBD0"/><stop offset="0.1667" stop-color="#FFE0B2"/><stop offset="0.3333" stop-color="#FFE0B2"/><stop offset="0.3333" stop-color="#FFF59D"/><stop offset="0.5000" stop-color="#FFF59D"/><stop offset="0.5000" stop-color="#C5E1A5"/><stop offset="0.6667" stop-color="#C5E1A5"/><stop offset="0.6667" stop-color="#B3E5FC"/><stop offset="0.8333" stop-color="#B3E5FC"/><stop offset="0.8333" stop-color="#D1C4E9"/><stop offset="1.0000" stop-color="#D1C4E9"/></linearGradient>
+</defs><g transform="translate(218.00 237.80) scale(4.9)"><circle cx="60" cy="40" r="46" fill="url(#glow)"/><path d="M60 12 C71 29 78 40 73 51 C69 58 51 58 47 51 C42 40 49 29 60 12 Z" fill="#FF7043" stroke="#5E3A6E" stroke-width="2"/>
+<path d="M60 26 C67 37 70 44 67 50 C64 54 56 54 53 50 C50 44 53 37 60 26 Z" fill="#FFB300"/>
+<path d="M60 38 C64 44 65 47 63 50 C61 52 59 52 57 50 C55 47 56 44 60 38 Z" fill="#FFF59D"/><path d="M56 58 H64 V63 H56 Z" fill="#5E3A6E"/>
+<path d="M16 62 H104 C104 86 84 104 60 104 C36 104 16 86 16 62 Z" fill="url(#stripes)" stroke="#5E3A6E" stroke-width="3" stroke-linejoin="round"/>
+<path d="M16 62 H104 C103.6 65.6 102.9 69 101.8 72 H18.2 C17.1 69 16.4 65.6 16 62 Z" fill="#B39DDB" stroke="#5E3A6E" stroke-width="3" stroke-linejoin="round"/>
+<circle cx="26" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="36" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="46" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="56" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="64" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="74" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="84" cy="67" r="1.8" fill="#FFFFFF"/><circle cx="94" cy="67" r="1.8" fill="#FFFFFF"/></g></svg>
