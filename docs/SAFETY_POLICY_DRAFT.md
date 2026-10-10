@@ -65,5 +65,6 @@
 7. Should a guardian get an **email** when their teen signs up? This isn't built in the first version, but it could be added.
 8. Should a donor be **told that an under-18 volunteer is bringing an adult**? Today they are not, so that nobody can pick out minors. The Board may prefer that donors know.
 9. Should an accepted pickup's **address be saved on the volunteer's phone** so it works with no signal? Today it is not, to protect donors.
+10. A volunteer sees a donor's address as soon as the donor accepts them, **even if they then cancel**. The app limits this (one pickup at a time for regular volunteers, and donors choose whom to accept), but it doesn't yet flag someone who cancels again and again. Should admins review repeat cancellations, and should the app warn or pause such accounts in a later version?
 
 _Draft prepared Sep 27, 2026 alongside the app build, and updated Oct 10, 2026 after the final review. Once decided, send the answers to the app developer. Most changes are a single setting._
