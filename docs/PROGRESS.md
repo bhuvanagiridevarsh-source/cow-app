@@ -6,15 +6,12 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 7: Home, Hours & impact meter** (normal effort). Not started: waiting for the user's "ready."
-
-Phase 6 closed on Oct 10 with phone check #6 passed (the user reported everything works) and all 6 checks passing (223 unit tests). The Home tab is still the Phase 1 placeholder (headline and lamp only); the user noticed, and it is built in step 7.2.
+**Phase 7: Home, Hours & impact meter** (normal effort). Steps 7.1–7.3 are built and pushed, and all 6 checks pass (243 unit tests). Nothing here has run on a phone yet. It's **waiting for phone check #7** (checklist at the bottom).
 
 ## Next step
 
-1. The user says "ready" for Phase 7.
-2. Step 7.1: the Skia lamp-glow impact meter, with Reduce Motion respected. Read the SDK 57 docs for `@shopify/react-native-skia` and Reanimated's reduced-motion support first.
-3. Step 7.2: Home (greeting, meter, List an item / Find items to pick up, "Up next", three nearby items, Donate). Step 7.3: Hours (total hours, tier and progress, recent confirmed pickups, Share my hours summary) with tier and hours tests.
+1. The user reloads the app, runs phone check #7, and reports ✓ or ✗ per line.
+2. Fix anything that fails, push, and announce Phase 8 (normal effort).
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -66,6 +63,9 @@ Phase 6 closed on Oct 10 with phone check #6 passed (the user reported everythin
 - [x] 6.4 Report screen (`report`), Block from listings and pickups, and Blocked people (`blocked`) on the Me tab with Unblock.
 - [x] 6.5 Pickup safety tips (`safety`): shown before a volunteer's first request, and linked from every pickup and the Me tab.
 - The Hours tab now lists the volunteer's pickups (in progress and earlier). Hours and tier totals come in Phase 7.
+- [x] 7.1 `src/components/impact-meter.tsx`: a Skia glow behind the lamp that grows wider and brighter with progress toward the goal, plus the total, goal, and a bar. The grow-in animation is skipped when Reduce Motion is on.
+- [x] 7.2 Home tab: greeting, an "Up next" card when something needs the person (`src/domain/up-next.ts`), the meter, List an item, Find items to pick up, three nearest items, and Donate money (hidden while the Zeffy link is blank).
+- [x] 7.3 Hours tab: confirmed hours, Share my hours summary (plain text through the Share sheet), level and progress to the next (`src/domain/tiers.ts`), pickups in progress, and recent confirmed pickups.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -111,6 +111,7 @@ Phase 6 closed on Oct 10 with phone check #6 passed (the user reported everythin
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 7 | Home, Hours & impact meter | ⏳ pending | See the checklist below |
 | 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
 | 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ✅ 11/11 | All lines passed. "Today" hides windows with under an hour left, so Morning is missing in the afternoon: by design. |
 | 4 | Content & About: About screens, photos, Me tab links, live content | ✅ 10/10 | All lines passed. Join the Movement lands on the website's sign-up form. |
@@ -189,3 +190,18 @@ Restart `npx expo start --tunnel` first (a new library was installed). Use the t
 16. **Use my location:** on Browse tap "Use my location": the phone asks permission with a clear reason, and the label changes to "Near you".
 
 **Optional: Ambassador multi-select.** In the Supabase SQL Editor run `select admin.verify_ambassador('your-email@example.com');` with your own email, reload the app, and Browse shows "Select several items".
+
+### Phone check #7 checklist
+
+Shake the phone and tap Reload first. Reply with ✓ or ✗ for each line.
+
+1. **Home.** It greets you by first name and shows the lamp with a soft yellow glow, the impact total, "of $25,000 · 3-year goal", and a green bar.
+2. **Glow grows in.** Pull down to refresh or reopen the app: the glow and bar ease in over about a second.
+3. **Buttons.** "List an item" opens the listing steps. "Find items to pick up" opens Browse.
+4. **Near you.** With an item listed by the other demo account, Home shows it under "Near you"; tapping it opens the item. "See all" opens Browse.
+5. **Up next (donor).** Request that item as demo volunteer. As demo donor, Home shows an "Up next" card saying someone wants your item; "Answer now" opens the pickup.
+6. **Up next (volunteer).** Accept it. As demo volunteer, Home shows "Your pickup is ready" with "See the address".
+7. **Hours.** As demo volunteer, the Hours tab shows your confirmed hours (at least 1 hour from phone check #6), your level, and a progress bar toward the next level.
+8. **Share.** "Share my hours summary" opens the iPhone share sheet with a plain-text summary.
+9. **Totals move.** Finish the pickup from line 6 (picked up, then confirmed). The volunteer's hours go up by 1, and the Home total goes up by the item's value.
+10. **Reduce Motion.** Turn on Settings → Accessibility → Motion → Reduce Motion, reopen the app: the glow and bar appear at once, and the flame doesn't flicker.
