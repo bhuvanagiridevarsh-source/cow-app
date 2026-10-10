@@ -6,12 +6,15 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 8: Offline, accessibility & polish** (normal effort). Steps 8.1–8.3 are built and pushed, and all 6 checks pass (258 unit tests). The offline and VoiceOver behavior was reviewed in code only; it has not run on a phone. It's **waiting for phone check #8** (checklist at the bottom).
+**Phase 9: Icon, splash, store setup & docs** (normal effort). Not started: waiting for the user's "ready" and their answer about the high-res logo.
+
+Phase 8 closed on Oct 10 with phone check #8 passed (the user reported all good) and all 6 checks passing (258 unit tests).
 
 ## Next step
 
-1. The user reloads the app, runs phone check #8, and reports ✓ or ✗ per line.
-2. Fix anything that fails, push, and announce Phase 9 (normal effort).
+1. The user says "ready" for Phase 9 and says whether CoW has a logo file of 1024×1024 or larger. If not, draw a clean vector version of the lamp (the app's `Lamp` artwork already exists as SVG paths) for CoW to approve.
+2. Step 9.1: app icon and splash at every required size. Step 9.2: `eas.json` (development, preview, production) and App Review-ready permission wording. Step 9.3: `README.md`, final `SUPABASE_SETUP.md` (Part C), `TERMS.md`, `PRIVACY_POLICY.md`, `ADMIN_GUIDE.md`, `LAUNCH_CHECKLIST.md`, `STORE_LISTING.md`, `CREDITS.md`.
+3. Carry into those docs: Apple sign-in untested until a real build; Apple token revocation on account deletion; `admin.cleanup_unfinished_signups()`; haptics re-test in a real build; Google Play donation rules; the offline address trade-off.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -115,7 +118,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 8 | Offline, accessibility & polish | ⏳ pending | See the checklist below |
+| 8 | Offline, accessibility & polish | ✅ passed | The user reported all good. |
 | 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
 | 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
 | 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ✅ 11/11 | All lines passed. "Today" hides windows with under an hour left, so Morning is missing in the afternoon: by design. |
