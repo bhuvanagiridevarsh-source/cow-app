@@ -6,12 +6,12 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 4: CoW content & About** (normal effort). Step 4.1 is done; 4.2 is next.
+**Phase 4: CoW content & About** (normal effort). Steps 4.1–4.4 are built, pushed, and all 6 checks pass (159 unit tests). It's **waiting for phone check #4** (checklist at the bottom).
 
 ## Next step
 
-1. Step 4.2: About screens (story, founder quote, how it works, team, ChangeMakers, board, partners, events, quotes, membership levels), reading from `useContent()`. Extract CoW's photos from `reference/website-home.html` into `assets/content/` and map the `photo` keys in `content.json` to them.
-2. Step 4.3: the Me tab and all its links. Step 4.4: `docs/UPDATING_CONTENT.md`, push, and confirm the live GitHub copy loads in the app.
+1. The user reloads the app and runs phone check #4, then reports ✓ or ✗ per line.
+2. Fix anything that fails, push, and announce Phase 5 (normal effort).
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -51,6 +51,9 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 - [x] 3.5 Me tab basics, edit profile, delete account.
 - [x] 3.6 `docs/SUPABASE_SETUP.md`, first version (Parts A and B).
 - [x] 4.1 `content/content.json` (brief §4 + website), rules in `src/features/content/schema.ts` (zod), loader in `load.ts`, and `useContent()`. The app ships the same file it fetches from GitHub, so there is no second copy to keep in sync. Order of preference: valid online copy, then the last good saved copy, then the built-in copy. Events sort themselves into coming up / past by date (`src/domain/events.ts`). 35 new tests.
+- [x] 4.2 About screens under `src/app/about/` (hub, story, how it works, team, partners, events, levels), open to signed-out visitors from Welcome. CoW's portraits and two photos were extracted from the website snapshot into `assets/content/`; a person without a photo shows initials.
+- [x] 4.3 Me tab: profile card, Ambassador request (button / pending / verified), About, Join the Movement, YouTube, Contact, Terms, Privacy, sign out, delete. Donate and social rows stay hidden while their URLs are blank. "Blocked users" arrives with blocking in Phase 6.
+- [x] 4.4 `docs/UPDATING_CONTENT.md`. Pushed; the live GitHub copy of `content.json` was checked against the local file.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -96,6 +99,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 4 | Content & About: About screens, photos, Me tab links, live content | ⏳ pending | See the checklist below |
 | 3 | Accounts: email code, Apple, age gate, onboarding, delete | ✅ 8/9 | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in + guardian ✓, delete account ✓. Apple sign-in ✗: not testable in the user's Expo Go (see Next step). Both demo accounts have finished setup. |
 | 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |
 
@@ -112,3 +116,18 @@ Start with `npx expo start --tunnel` in your own Terminal. Reply with ✓ or ✗
 7. **Demo donor + guardian.** Enter `demo.donor@childrenofwarproject.org`: a password box appears instead of "Send code". Sign in, choose a birth date that makes you 15, and confirm the parent/guardian screen appears before Terms.
 8. **Sign in with Apple.** Sign out, tap Sign in with Apple, and finish onboarding.
 9. **Delete account.** Signed in with the Apple account from line 8: Me → Delete account → "Yes, delete everything". You return to Welcome. (Don't delete your own admin account, or B4 has to be redone.)
+
+### Phone check #4 checklist
+
+Shake the phone and tap Reload first. Reply with ✓ or ✗ for each line.
+
+1. **About from Welcome.** Sign out. On Welcome, tap "About CoW" at the bottom: the About page opens without signing in, with the lamp, the headline, and the team photo.
+2. **Six sections.** Open each card (Our story, How it works, The team, Partners, Events, Membership levels). Each one opens, scrolls, and Back returns to About.
+3. **Photos.** On The team, all nine people (3 leaders, 2 ChangeMakers, 4 board members) show a round photo.
+4. **Events.** Both events are under "Past events", and "Coming up" shows the calm "Nothing scheduled right now" message.
+5. **Partner link.** On Partners, tap Shradhaa Foundation: their website opens in a sheet inside the app.
+6. **Me tab.** Sign in. Me shows your profile, an Ambassador card, a Children of War Project card, and a Legal card. There is no Donate row (the Zeffy link is still blank).
+7. **Links.** About CoW opens About. YouTube opens CoW's channel. Contact opens your mail app addressed to CoW.
+8. **Join the Movement.** It opens the website. Does it land on the sign-up form? (This answers the open question in `src/config.ts`.)
+9. **Request Ambassador.** With the demo volunteer account, tap Request Ambassador: the card changes to "Your request is in."
+10. **Dark mode.** Turn on Dark Mode in iPhone Settings and glance through About: all text is readable.
