@@ -114,7 +114,7 @@ Then the same on an Android phone: `eas build --profile preview --platform andro
 
 ### One more check on a real photo
 
-The app re-saves every photo and refuses to upload one that still carries hidden location data. To confirm that independently, once, on a real upload:
+The app re-saves every photo and refuses to upload one that still carries hidden location data. This was confirmed on a real upload from the test database on Oct 10, 2026. Repeat it once on the first real build:
 
 1. In Supabase: **Storage → item-photos**, open any folder, and download one photo taken with the phone's camera.
 2. On a Mac, select the file in Finder and press **Cmd+I**. Under **More Info** there must be **no Latitude or Longitude**.

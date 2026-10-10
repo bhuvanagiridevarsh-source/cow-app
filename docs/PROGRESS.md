@@ -32,6 +32,7 @@ All 6 checks pass on the user's Mac and on a brand-new copy cloned from GitHub (
 - **Donors weren't told a listing was hidden for review (fixed).** The Donate tab now says so.
 - **Android would back up the saved sign-in to Google (fixed):** `android.allowBackup` is now false.
 - **Two iOS permission messages had vague default wording (fixed),** and **Apple's privacy manifest was missing (fixed):** `ios.privacyManifests` in `app.json`. Verified by generating the real iOS and Android projects in a scratch folder: strict network security, specific wording everywhere, tracking off.
+- **A real uploaded photo was inspected and carries no location or camera information** (details in phone check #10, line 5).
 - **Checked and clean:** no secrets anywhere in the git history, `.env` never committed, no logging of personal data, no ad, analytics, or tracking libraries, no "tax-deductible", every link resolves (tie.org refused the automated check; the user taps it once).
 - **Open, documented in LAUNCH_CHECKLIST:** library audit warnings are in build tools except one low-risk web-address reader inside the navigation library (fixed in the next Expo SDK); Android's permission list should be reviewed before the Android release; Sign in with Apple, the success buzz, and the real icon and launch screen need a real build; Apple sign-in token revocation is not built.
 
@@ -294,4 +295,4 @@ Shake the phone and tap Reload first. The database changed, so an app that isn't
 2. **No account before the age question.** Sign out. Tap "I already have an account" and enter an email that has never been used: you should see "We couldn't find an account with that email…" and no email should arrive. Then sign in with your real email as usual: it still works.
 3. **No warnings.** Look at the Terminal running Expo while you use the app for a minute. Report any yellow or red messages.
 4. **One link.** About CoW → Partners → The Indus Entrepreneurs (TiE): the site opens.
-5. **A real photo has no hidden location.** In Supabase: Storage → item-photos → open a folder → download one photo you took with the camera. Tell the developer (or Claude) the file name in Downloads so it can be inspected.
+5. **A real photo has no hidden location.** ✅ Done Oct 10. The user downloaded an uploaded photo (`3d3e8e6e-….jpg`, 1200×1600, 212,585 bytes, the same size the database records). Checked with macOS's own tools and a separate byte-level reader: no GPS data, no camera make or model, no dates, no XMP, and an empty IPTC block. The only hidden information left is rotation, resolution, pixel size, and a color profile.
