@@ -6,12 +6,15 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 6: Browse & pickups** (normal effort). Steps 6.1–6.5 are built and pushed, and all 6 checks pass (223 unit tests). Nothing here has run on a phone yet. It's **waiting for phone check #6**, the full two-account loop (checklist at the bottom).
+**Phase 7: Home, Hours & impact meter** (normal effort). Not started: waiting for the user's "ready."
+
+Phase 6 closed on Oct 10 with phone check #6 passed (the user reported everything works) and all 6 checks passing (223 unit tests). The Home tab is still the Phase 1 placeholder (headline and lamp only); the user noticed, and it is built in step 7.2.
 
 ## Next step
 
-1. The user restarts `npx expo start --tunnel` (a new library was installed), then runs phone check #6 and reports ✓ or ✗ per line.
-2. Fix anything that fails, push, and announce Phase 7 (normal effort).
+1. The user says "ready" for Phase 7.
+2. Step 7.1: the Skia lamp-glow impact meter, with Reduce Motion respected. Read the SDK 57 docs for `@shopify/react-native-skia` and Reanimated's reduced-motion support first.
+3. Step 7.2: Home (greeting, meter, List an item / Find items to pick up, "Up next", three nearby items, Donate). Step 7.3: Hours (total hours, tier and progress, recent confirmed pickups, Share my hours summary) with tier and hours tests.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -108,7 +111,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 6 | Browse & pickups: the full two-account loop, report, block | ⏳ pending | See the checklist below |
+| 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
 | 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ✅ 11/11 | All lines passed. "Today" hides windows with under an hour left, so Morning is missing in the afternoon: by design. |
 | 4 | Content & About: About screens, photos, Me tab links, live content | ✅ 10/10 | All lines passed. Join the Movement lands on the website's sign-up form. |
 | 3 | Accounts: email code, Apple, age gate, onboarding, delete | ✅ 8/9 | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in + guardian ✓, delete account ✓. Apple sign-in ✗: not testable in the user's Expo Go (see Next step). Both demo accounts have finished setup. |
