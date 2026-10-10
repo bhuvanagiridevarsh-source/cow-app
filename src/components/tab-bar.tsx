@@ -10,6 +10,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/app-text';
+import { useAuth } from '@/features/auth/auth-provider';
+import { useMyPickups } from '@/features/pickups/use-pickups';
 import { usePalette } from '@/hooks/use-theme';
 import { MIN_TOUCH, radius, space } from '@/theme';
 
@@ -28,6 +30,12 @@ export const TABS: Record<string, { label: string; icon: PhosphorIcon }> = {
 export function CowTabBar({ state, navigation }: TabBarProps) {
   const p = usePalette();
   const insets = useSafeAreaInsets();
+  // There are no push notifications in V1, so a dot on Donate says "someone needs your answer."
+  const { userId } = useAuth();
+  const pickups = useMyPickups(userId);
+  const waitingOnMe = (pickups.data ?? []).filter(
+    (x) => x.donor_id === userId && (x.status === 'requested' || x.status === 'collected'),
+  ).length;
   return (
     <View
       accessibilityRole="tablist"
@@ -48,7 +56,9 @@ export function CowTabBar({ state, navigation }: TabBarProps) {
           <Pressable
             key={route.key}
             accessibilityRole="tab"
-            accessibilityLabel={tab.label}
+            accessibilityLabel={
+              route.name === 'donate' && waitingOnMe > 0 ? `${tab.label}. ${waitingOnMe} waiting for you.` : tab.label
+            }
             accessibilityState={{ selected: focused }}
             onPress={onPress}
             style={styles.tab}>
@@ -60,6 +70,9 @@ export function CowTabBar({ state, navigation }: TabBarProps) {
                 duotoneColor={p.accent}
                 duotoneOpacity={0.9}
               />
+              {route.name === 'donate' && waitingOnMe > 0 ? (
+                <View style={[styles.dot, { backgroundColor: p.danger, borderColor: p.surface }]} />
+              ) : null}
             </View>
             <AppText
               variant="small"
@@ -78,4 +91,5 @@ const styles = StyleSheet.create({
   bar: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth, paddingTop: space.sm },
   tab: { flex: 1, alignItems: 'center', minHeight: MIN_TOUCH, gap: 2 },
   pill: { borderRadius: radius.pill, paddingHorizontal: space.md, paddingVertical: 4 },
+  dot: { position: 'absolute', top: 2, right: 10, width: 12, height: 12, borderRadius: 6, borderWidth: 2 },
 });

@@ -6,14 +6,12 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 6: Browse & pickups** (normal effort). Not started: waiting for the user's "ready."
-
-Phase 5 closed on Oct 10 with phone check #5 at 11/11 and all 6 checks passing (202 unit tests). The camera, photo picker, photo resizing, and file reading all work in the user's Expo Go.
+**Phase 6: Browse & pickups** (normal effort). Steps 6.1–6.5 are built and pushed, and all 6 checks pass (223 unit tests). Nothing here has run on a phone yet. It's **waiting for phone check #6**, the full two-account loop (checklist at the bottom).
 
 ## Next step
 
-1. The user says "ready" for Phase 6.
-2. Step 6.1: Browse (photos, distance, category chips, the filters sheet, empty and offline states). Read the Expo SDK 57 docs for `expo-location` before writing code that uses it, and install it with `npx expo install`.
+1. The user restarts `npx expo start --tunnel` (a new library was installed), then runs phone check #6 and reports ✓ or ✗ per line.
+2. Fix anything that fails, push, and announce Phase 7 (normal effort).
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -59,6 +57,12 @@ Phase 5 closed on Oct 10 with phone check #5 at 11/11 and all 6 checks passing (
 - [x] 5.1 The 4-step listing flow in `src/app/(app)/list-item/` (category; photo, name, value, condition, day and time; address; review). Rules live in `src/domain/listing.ts` and `src/domain/pickup-windows.ts` (New Jersey time, daylight-saving safe). Minor donors get the adult-home checkbox when the board's rule is on (D3). The same screens edit a listing (`/list-item?id=...`).
 - [x] 5.2 Photo pipeline in `src/lib/photos.ts`: camera (asks permission) or the photo picker (no permission needed), shrink to 1600 px, re-save as JPEG, upload with 3 tries. `src/lib/jpeg.ts` inspects the bytes and **refuses to upload any photo that still carries GPS data**. The photo uploads only when Post is tapped, and is removed again if posting fails.
 - [x] 5.3 Donate tab: listings grouped by what happens next, Edit and Remove for waiting listings, a "choose a new time" prompt once a pickup time passes, the listing limit, pull to refresh, and a Donate money card (hidden while the Zeffy link is blank).
+- [x] 6.1 Browse tab: open listings from other people, nearest first, with category chips and a Filters sheet for distance. Distances start from the profile ZIP; "Use my location" switches to the phone's location, which never leaves the phone. Verified Ambassadors get "Select several items".
+- [x] 6.2 Item screen (`item/[id]`): Request pickup, the adult checkbox for minors, and plain reasons when someone can't request (age, limit). Report and Block.
+- [x] 6.3 Pickup screen (`pickup/[id]`): timeline, one main button per step, the address and Open in Maps for the accepted volunteer only, a success buzz on confirm, and a re-check every 20 seconds (there are no push notifications). The Donate tab links each in-progress listing to its pickup and shows a red dot on the tab when something needs the donor.
+- [x] 6.4 Report screen (`report`), Block from listings and pickups, and Blocked people (`blocked`) on the Me tab with Unblock.
+- [x] 6.5 Pickup safety tips (`safety`): shown before a volunteer's first request, and linked from every pickup and the Me tab.
+- The Hours tab now lists the volunteer's pickups (in progress and earlier). Hours and tier totals come in Phase 7.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -104,6 +108,7 @@ Phase 5 closed on Oct 10 with phone check #5 at 11/11 and all 6 checks passing (
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 6 | Browse & pickups: the full two-account loop, report, block | ⏳ pending | See the checklist below |
 | 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ✅ 11/11 | All lines passed. "Today" hides windows with under an hour left, so Morning is missing in the afternoon: by design. |
 | 4 | Content & About: About screens, photos, Me tab links, live content | ✅ 10/10 | All lines passed. Join the Movement lands on the website's sign-up form. |
 | 3 | Accounts: email code, Apple, age gate, onboarding, delete | ✅ 8/9 | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in + guardian ✓, delete account ✓. Apple sign-in ✗: not testable in the user's Expo Go (see Next step). Both demo accounts have finished setup. |
@@ -153,3 +158,31 @@ Restart `npx expo start --tunnel` first (new libraries were installed). Reply wi
 9. **Edit.** Tap Edit, change the value, and go through to Save changes: the card shows the new value.
 10. **Remove.** Tap Remove listing, then Remove: the item disappears.
 11. **Minor donor.** With the demo donor account (set up as age 15), step 3 shows the parent/guardian checkbox, and Next is refused until it's ticked.
+
+### Phone check #6 checklist
+
+Restart `npx expo start --tunnel` first (a new library was installed). Use the two demo accounts: sign out and back in to switch. Both have ZIP 08831. Reply with ✓ or ✗ for each line. If any screen shows a red error, send a screenshot.
+
+**Setup**
+1. As **demo donor**, list an item (any photo, tomorrow, any time). It appears under "Waiting for a volunteer".
+
+**The loop**
+2. As **demo volunteer**, open Browse: the item is there with its photo, town, and "under 1 mi". Your own listings never show here.
+3. Tap a category chip that doesn't match: the item disappears and "Nothing matches" shows. Tap All to bring it back. The distance button opens a sheet from the bottom.
+4. Open the item and tap Request pickup: the safety tips open first. Tap "I understand", then Request pickup again.
+5. You land on the pickup screen: step 1 of the timeline is filled, it says you're waiting for the donor, and **no address is shown**.
+6. As **demo donor**: the Donate tab has a red dot. The item is under "Needs your answer". Tap "Answer the request", then Accept.
+7. As **demo volunteer**, open the Hours tab and tap the pickup: the address now shows, and Open in Maps opens Apple Maps with directions.
+8. Tap "I picked it up". The timeline moves to step 3.
+9. As **demo donor**: the item is under "Picked up: please confirm". Open it and tap "Confirm it was picked up". All four steps fill in.
+10. Both sides now show the pickup as confirmed, and the impact total on the Welcome screen went up by the item's value.
+
+**Other paths**
+11. List a second item as demo donor, request it as demo volunteer, then **Decline** it as demo donor: the item goes back to "Waiting for a volunteer".
+12. Request it again, then as demo volunteer tap "Cancel this pickup": the item is on Browse again.
+13. On the item screen, tap "Report this listing", pick a reason, and send: you see "Thank you".
+14. As demo volunteer, tap "Block this donor": the item vanishes from Browse. Then Me → Blocked people → Unblock: it returns.
+15. **Minor volunteer:** your own account is 16, so on an item it shows the "An adult will come with me" checkbox and refuses the request until it's ticked.
+16. **Use my location:** on Browse tap "Use my location": the phone asks permission with a clear reason, and the label changes to "Near you".
+
+**Optional: Ambassador multi-select.** In the Supabase SQL Editor run `select admin.verify_ambassador('your-email@example.com');` with your own email, reload the app, and Browse shows "Select several items".

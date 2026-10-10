@@ -36,6 +36,15 @@
         }
       ],
       [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "CoW uses your location to show donated items near you. It stays on your phone.",
+          "locationAlwaysAndWhenInUsePermission": "CoW uses your location to show donated items near you. It stays on your phone.",
+          "isIosBackgroundLocationEnabled": false,
+          "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#FFF6DC",

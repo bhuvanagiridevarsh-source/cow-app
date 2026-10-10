@@ -6,6 +6,7 @@ import { InfoIcon } from 'phosphor-react-native/src/icons/Info';
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import { MedalIcon } from 'phosphor-react-native/src/icons/Medal';
 import { PencilSimpleIcon } from 'phosphor-react-native/src/icons/PencilSimple';
+import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
 import { ShieldCheckIcon } from 'phosphor-react-native/src/icons/ShieldCheck';
 import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
 import { TrashIcon } from 'phosphor-react-native/src/icons/Trash';
@@ -115,9 +116,15 @@ export default function MeScreen() {
       </Card>
 
       <Card>
+        <AppText variant="heading">Safety</AppText>
+        <LinkRow label="Pickup safety tips" icon={ShieldCheckIcon} onPress={() => router.push('/safety')} />
+        <LinkRow label="Blocked people" icon={ProhibitIcon} onPress={() => router.push('/blocked')} />
+      </Card>
+
+      <Card>
         <AppText variant="heading">Legal</AppText>
         <LinkRow label="Terms of Use" icon={FileTextIcon} onPress={() => router.push('/legal/terms')} />
-        <LinkRow label="Privacy Policy" icon={ShieldCheckIcon} onPress={() => router.push('/legal/privacy')} />
+        <LinkRow label="Privacy Policy" icon={FileTextIcon} onPress={() => router.push('/legal/privacy')} />
       </Card>
 
       <Button

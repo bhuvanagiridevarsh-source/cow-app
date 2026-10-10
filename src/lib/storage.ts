@@ -10,6 +10,10 @@ export const STORAGE_KEYS = {
   notice: 'cow:notice',
   /** The last good copy of the About content downloaded from GitHub (shown when offline). */
   contentCache: 'cow:content-cache',
+  /** True once the person chose "Use my location" on Browse (the location itself is never saved). */
+  useLocation: 'cow:use-location',
+  /** True once the person has read the pickup safety tips. */
+  safetySeen: 'cow:safety-seen',
 } as const;
 
 /** Reads JSON from phone storage. Returns null if missing, unreadable, or storage is unavailable. */

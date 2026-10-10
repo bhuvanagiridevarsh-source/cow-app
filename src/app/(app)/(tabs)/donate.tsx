@@ -15,16 +15,25 @@ import { Screen } from '@/components/ui/screen';
 import { EmptyState, ErrorRetry, Loading } from '@/components/ui/states';
 import { TextLink } from '@/components/ui/text-link';
 import { DONATE_URL } from '@/config';
-import { countsTowardLimit, groupDonations } from '@/domain/my-donations';
+import { countsTowardLimit, groupDonations, type DonationGroup } from '@/domain/my-donations';
 import { isWindowOver } from '@/domain/pickup-windows';
+import { isActivePickup } from '@/domain/status';
 import { isUsableUrl } from '@/domain/urls';
 import { useAuth } from '@/features/auth/auth-provider';
 import { friendlyError } from '@/features/errors';
 import { withdrawItem, type Item } from '@/features/items/api';
 import { myItemsKey, useMyItems } from '@/features/items/use-items';
+import { useMyPickups } from '@/features/pickups/use-pickups';
 import { useRules } from '@/features/settings/use-settings';
 import { openExternal } from '@/lib/links';
 import { removePhoto } from '@/lib/photos';
+
+/** The button that opens the pickup for a listing someone has asked for. */
+const PICKUP_BUTTONS: Partial<Record<DonationGroup, string>> = {
+  needs_answer: 'Answer the request',
+  scheduled: 'View pickup',
+  confirm: 'Confirm pickup',
+};
 
 /** My donations: everything this person has listed, grouped by what happens next. */
 export default function DonateScreen() {
@@ -32,6 +41,7 @@ export default function DonateScreen() {
   const rules = useRules();
   const queryClient = useQueryClient();
   const items = useMyItems(userId);
+  const pickups = useMyPickups(userId);
   const [error, setError] = useState<string | null>(null);
   const [withdrawing, setWithdrawing] = useState<string | null>(null);
 
@@ -95,7 +105,12 @@ export default function DonateScreen() {
   }
 
   return (
-    <Screen onRefresh={() => void items.refetch()} refreshing={items.isRefetching}>
+    <Screen
+      onRefresh={() => {
+        void items.refetch();
+        void pickups.refetch();
+      }}
+      refreshing={items.isRefetching}>
       {header}
       <FormMessage message={error} />
 
@@ -109,7 +124,24 @@ export default function DonateScreen() {
       {groups.map((group) => (
         <Section key={group.key} title={group.title}>
           {group.items.map((item) => {
-            if (group.key !== 'waiting') return <ItemCard key={item.id} item={item} />;
+            if (group.key !== 'waiting') {
+              // The pickup in progress for this listing, if there is one.
+              const pickup = (pickups.data ?? []).find(
+                (x) => x.item_id === item.id && x.donor_id === userId && isActivePickup(x.status),
+              );
+              const label = PICKUP_BUTTONS[group.key];
+              return (
+                <ItemCard key={item.id} item={item}>
+                  {pickup && label ? (
+                    <Button
+                      label={label}
+                      variant={group.key === 'scheduled' ? 'outline' : 'primary'}
+                      onPress={() => router.push({ pathname: '/pickup/[id]', params: { id: pickup.id } })}
+                    />
+                  ) : null}
+                </ItemCard>
+              );
+            }
             const expired = isWindowOver(item.pickup_window_end);
             return (
               <ItemCard
