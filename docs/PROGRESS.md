@@ -2,20 +2,20 @@
 
 > **New session?** Read these first, in order: `docs/BRIEF.md`, `docs/PLAN.md`, this file, then run `git status`. Continue from **Next step** below.
 
-_Last updated: Oct 9, 2026 (Phase 3)_
+_Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 3: Accounts & sign-in** (MAX effort). Steps 3.1–3.6 are built. Supabase dashboard setup (SUPABASE_SETUP Part B: B0–B4) is **done**: the two demo accounts exist, and the user's own account signed in with an email code, finished onboarding, and is an admin. It's **waiting for** the rest of **phone check #3** (checklist at the bottom).
+**Phase 4: CoW content & About** (normal effort). Not started: waiting for the user's "ready."
 
-All 6 checks pass (Oct 9, 115 unit tests), after `npx expo install --fix` brought 4 Expo packages up to the SDK's current patch versions.
+Phase 3 closed on Oct 10 with phone check #3 at 8/9 and all 6 checks passing (115 unit tests). The user approved closing it with Apple sign-in recorded as built but untested.
 
 ## Next step
 
-1. The user decides how to close Phase 3: **with Apple sign-in recorded as "built, untested"** (recommended), or wait for a real build. Everything else in phone check #3 passed.
-2. On their OK: push, then announce Phase 4 (normal effort) and wait for "ready."
+1. The user says "ready" for Phase 4.
+2. Step 4.1: write `content/content.json` (brief §4 + the website), the zod schema, the bundled copy, and the remote fetch with fallback, with tests.
 
-**Apple sign-in status.** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go on Oct 9, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build (Phase 9, needs the Apple Developer account). Add to LAUNCH_CHECKLIST.
+**Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
 ## Done
 
