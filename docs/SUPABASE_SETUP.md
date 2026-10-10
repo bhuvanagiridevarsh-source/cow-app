@@ -6,7 +6,7 @@ This guide has three parts:
 
 - **Part A** is what's already done for the **test project**.
 - **Part B** is the **dashboard steps you do now**, before testing sign-in on your phone.
-- **Part C** covers the **real (production) project** for launch. It's filled in during Phase 9.
+- **Part C** covers the **real (production) project** for launch.
 
 ---
 
@@ -108,12 +108,80 @@ In **SQL Editor**, paste the whole file `supabase/tests/security_and_rules.test.
 
 ---
 
-## Part C — Production project (filled in during Phase 9)
+## Part C — Production project (for launch)
 
-This part will cover:
+The test project keeps test data away from real people. The real app gets its own project, owned by CoW.
 
-- creating the real project under **CoW's email** and applying the migrations in order
-- connecting a real email service so codes reach everyone (Resend or Brevo)
-- adding `org.childrenofwarproject.app` to Apple's Client IDs
-- the demo accounts for App Store review
-- what to do about free-plan pausing
+### C1. Create the project
+
+1. Sign in at supabase.com with **CoW's email** (not a personal one). Create an organization named for CoW.
+2. Click **New project**. Name it `cow-app`, choose the **East US** region, and save the database password in CoW's password manager.
+3. Supabase shows the cost before creating it. The free plan is $0.
+
+### C2. Build the database
+
+Apply every file in `supabase/migrations/`, **in file-name order** (the numbers at the start put them in order).
+
+**Easiest way:** in the dashboard, open **SQL Editor → New query**. For each file, in order: open it on GitHub, click **Raw**, copy everything, paste, and click **Run**. Wait for "Success" before the next one.
+
+**Developer way:** install the Supabase CLI, run `supabase link` with the project ID, then `supabase db push`.
+
+One file (`…000200_zip_centroids_seed.sql`) is large. If the editor struggles, use the developer way.
+
+### C3. Prove the privacy rules work
+
+1. In **SQL Editor**, paste the whole file `supabase/tests/security_and_rules.test.sql` and click **Run**. The expected result starts with **ALL 78 TESTS PASSED**. It shows as a red error on purpose; that's how the test undoes itself.
+2. Open **Advisors → Security Advisor**. It should list no errors.
+   - It may show a warning named **"Leaked Password Protection Disabled."** Only the two demo accounts use passwords. Turn the protection on under **Authentication → Sign In / Providers → Email** if your plan offers it; otherwise give the demo accounts long, random passwords.
+
+Do not launch if a test fails.
+
+### C4. Connect the app
+
+1. **Project Settings → API Keys.** Copy the **Project URL** and the **Publishable key**.
+2. Give them to the developer for the build settings (see `LAUNCH_CHECKLIST.md`, step 4).
+3. **Never copy the secret (service_role) key anywhere.** The app doesn't need it.
+
+### C5. Real email for sign-in codes
+
+Supabase's built-in email only reaches members of your Supabase team, so a real email service is required.
+
+1. Create a free account with an email service such as **Resend** or **Brevo**.
+2. In that service, add the domain `childrenofwarproject.org`. It shows a few **DNS records** to add. Whoever manages the website's domain adds them. This proves CoW owns the address and keeps the emails out of spam.
+3. The service gives you SMTP details (host, port, username, password). In Supabase: **Authentication → Emails → SMTP Settings**, turn on **custom SMTP**, and enter them. Set the sender to something like `hello@childrenofwarproject.org` and the sender name to `CoW`.
+4. Then do steps **B1** above in this project: paste the code template into both email templates, and set **Email OTP Length** to `6` and **Expiration** to `900`.
+5. Test it: sign up in a test build with an email that is **not** on the Supabase team.
+
+A Gmail app password (step B0) also works for a very small launch, at up to about 500 emails a day, but emails from a personal Gmail look less official.
+
+### C6. Sign in with Apple
+
+1. **Authentication → Sign In / Providers → Apple.** Turn it on.
+2. **Client IDs:** `org.childrenofwarproject.app`
+   Add `host.exp.Exponent` after a comma only if you still test in Expo Go against this project.
+3. Leave the OAuth secret fields empty. The app uses Apple's native iPhone sign-in.
+4. In the Apple Developer account, the app's identifier `org.childrenofwarproject.app` must have the **Sign in with Apple** capability. Expo's build service turns this on when it builds.
+
+### C7. Demo accounts and the first admin
+
+1. Repeat step **B3** in this project to create `demo.donor@…` and `demo.volunteer@…` with strong passwords, saved in CoW's password manager. Apple's and Google's reviewers use these.
+2. Sign in to a test build with each one and finish the setup screens. Use an adult birthday so the reviewer isn't asked for a guardian.
+3. List two or three realistic items with the demo donor, so Browse isn't empty for the reviewer.
+4. Repeat step **B4** to make the first CoW admin.
+
+### C8. Settings
+
+**Table Editor → settings** has one row with the starting values. Change them only as the Board decides (`SAFETY_POLICY_DRAFT.md`). `UPDATING_CONTENT.md` explains each one.
+
+### C9. Free-plan pausing
+
+Free projects pause after about 7 days with very little activity, and the app then can't load anything until someone clicks **Resume project**. Paused projects can be restored for 90 days.
+
+- **Recommended for the live app:** upgrade to **Supabase Pro** ($25 a month), which never pauses and adds daily backups.
+- **If staying on the free plan:** the app will keep the project awake as long as people use it. Check the dashboard weekly, and know that a quiet week can pause it.
+
+### C10. Keep the account safe
+
+- Turn on two-step sign-in for every Supabase team member.
+- Keep the team small. Anyone on it can see private information.
+- The photo folder (`item-photos`) is private and created by the migrations. Don't make it public.

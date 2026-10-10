@@ -6,15 +6,14 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 9: Icon, splash, store setup & docs** (normal effort). Not started: waiting for the user's "ready" and their answer about the high-res logo.
-
-Phase 8 closed on Oct 10 with phone check #8 passed (the user reported all good) and all 6 checks passing (258 unit tests).
+**Phase 9: Icon, splash, store setup & docs** (normal effort). Steps 9.1–9.3 are built and pushed, and all 6 checks pass (258 unit tests). It's **waiting for** the user to look at the icon and say whether it's good to take to CoW for approval (phone check #9, below).
 
 ## Next step
 
-1. The user says "ready" for Phase 9 and says whether CoW has a logo file of 1024×1024 or larger. If not, draw a clean vector version of the lamp (the app's `Lamp` artwork already exists as SVG paths) for CoW to approve.
-2. Step 9.1: app icon and splash at every required size. Step 9.2: `eas.json` (development, preview, production) and App Review-ready permission wording. Step 9.3: `README.md`, final `SUPABASE_SETUP.md` (Part C), `TERMS.md`, `PRIVACY_POLICY.md`, `ADMIN_GUIDE.md`, `LAUNCH_CHECKLIST.md`, `STORE_LISTING.md`, `CREDITS.md`.
-3. Carry into those docs: Apple sign-in untested until a real build; Apple token revocation on account deletion; `admin.cleanup_unfinished_signups()`; haptics re-test in a real build; Google Play donation rules; the offline address trade-off.
+1. The user reviews the icon and splash (phone check #9) and skims the new guides.
+2. Then push anything changed and announce Phase 10, the final pre-submission review (**MAX effort**).
+
+**Not re-run this phase:** the 78 database security tests. The one new migration only adds an admin command; it was tested on its own (below). Phase 10 re-runs the full suite.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -72,6 +71,10 @@ Phase 8 closed on Oct 10 with phone check #8 passed (the user reported all good)
 - [x] 8.1 Offline: the data cache is saved on the phone for 7 days and reloaded at startup (`src/lib/query.ts`), so the app opens signed in and shows saved screens with no connection. `src/domain/offline.ts` lists exactly what is saved; **exact addresses, the phone's location, and photo links are never saved**, and everything is erased on sign-out. Every screen shows an offline banner, and a screen with nothing saved says "You're offline" instead of loading forever. Photos are cached by their path, so they aren't downloaded again when a private link rotates.
 - [x] 8.2 Accessibility audit: every pressable has a role, a label, and a 44-point target. The contrast tests now cover the pairs added since Phase 1; three failed in the light theme (blue links and grey captions on the light blue and cream cards were 4.3–4.4:1), so `link` and `muted` were darkened slightly. The meter's "Try again" became a proper link.
 - [x] 8.3 Polish: timeline steps ease in when a pickup moves on (off with Reduce Motion). Wording pass: no placeholder text, no "tax-deductible", no emoji used as icons, and no colors outside `src/theme.ts` except the lamp artwork. The only TODOs left are the four pending values in `src/config.ts`.
+- [x] 9.1 Icon and splash from a redrawn lamp (CoW had no logo larger than 256 px): `assets/brand/icon.png` (1024, no transparency), Android adaptive foreground and monochrome layers, and `splash.png`, all wired into `app.json`. Sources are in `assets/brand/source/`. **CoW still has to approve the artwork.**
+- [x] 9.2 `eas.json` with development, preview, and production profiles, each tied to an EAS environment for the Supabase keys. Camera, photo, and location permission wording is in `app.json`. `ITSAppUsesNonExemptEncryption` is set to false (the app only uses standard HTTPS).
+- [x] 9.3 Docs: `README.md`, `ADMIN_GUIDE.md`, `LAUNCH_CHECKLIST.md`, `STORE_LISTING.md`, `CREDITS.md`, and `SUPABASE_SETUP.md` Part C. `PRIVACY_POLICY.md` was corrected to match the app (no address lookup; what is kept on the phone; camera and maps) and is now version 2026-10-10. `TERMS.md` is unchanged, so nobody is asked to accept again.
+- [x] Migration `20261010000100_admin_cleanup.sql` adds `admin.cleanup_unfinished_signups()` and is applied to dev. Tested in a rolled-back transaction: it removed a 3-day-old empty login, kept a 2-hour-old one, kept every finished account, and refused 0 hours. The app's roles cannot run it.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -100,8 +103,9 @@ Phase 8 closed on Oct 10 with phone check #8 passed (the user reported all good)
 
 ## Open items found in Phase 3
 
-- **Sign in with Apple token revocation.** Apple says apps "should" revoke Sign in with Apple tokens when an account is deleted. That needs a server-side Apple key and an Edge Function. It isn't built yet; add it to LAUNCH_CHECKLIST as a known item.
-- **Leftover empty logins.** If an under-13 sign-in happens while offline, an empty login (email only, no profile) may remain. Plan: add an `admin.cleanup_unfinished_signups()` command and document it in ADMIN_GUIDE (Phase 9).
+- **Sign in with Apple token revocation.** Apple says apps "should" revoke Sign in with Apple tokens when an account is deleted. That needs a server-side Apple key and an Edge Function. It isn't built yet. It is listed in LAUNCH_CHECKLIST §8 as a known gap.
+- **Security Advisor warning (new in Phase 9):** "Leaked Password Protection Disabled." It appeared once the demo password accounts existed. It's a dashboard setting, not a code issue; SUPABASE_SETUP C3 covers it.
+- **Leftover empty logins.** Solved in Phase 9: `admin.cleanup_unfinished_signups()`, documented in ADMIN_GUIDE. The dev project has two such logins from testing; they were left alone.
 - **Typed routes.** Route types are generated only by the dev server (`.expo/types`). On a fresh clone, route checking is relaxed until `npx expo start` runs once.
 
 ## Waiting on (not blocking yet)
@@ -118,6 +122,7 @@ Phase 8 closed on Oct 10 with phone check #8 passed (the user reported all good)
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 9 | Icon, splash, store setup & docs | ⏳ pending | See below |
 | 8 | Offline, accessibility & polish | ✅ passed | The user reported all good. |
 | 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
 | 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
@@ -235,3 +240,13 @@ Shake the phone and tap Reload first, then open Home, Browse, Donate, Hours, and
 **Text size and dark mode**
 11. Settings → Display & Brightness → Text Size all the way up: Home, Browse, and a pickup stay readable, with no text cut off or overlapping.
 12. Dark Mode on: Home, Browse, Donate, Hours, Me, and a pickup are all readable.
+
+### Phone check #9
+
+Expo Go can't show the app's own icon or launch screen (it shows Expo's), so this check is on the Mac.
+
+1. **Icon.** Open `assets/brand/icon.png`. Is it good enough to take to CoW for approval?
+2. **Splash.** Open `assets/brand/splash.png`: the same lamp, shown on cream (light mode) or navy (dark mode) when the app starts.
+3. **Still works.** Reload the app in Expo Go: it opens and behaves as before.
+
+The real icon and launch screen are checked on a phone with the first preview build (LAUNCH_CHECKLIST §6).

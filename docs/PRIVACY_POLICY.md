@@ -6,7 +6,7 @@ The app shows this exact text (without this note). After any edit, run:  npm run
 Keep this accurate: if the app starts collecting something new, this page must say so (and so must the App Store / Google Play privacy answers).
 -->
 
-**Version:** 2026-09-27
+**Version:** 2026-10-10
 
 Children of War Project ("CoW", "we") built this app for students and families. We collect as little as we can. We never sell your information, and the app has **no ads, no analytics, and no tracking**.
 
@@ -20,8 +20,9 @@ Children of War Project ("CoW", "we") built this app for students and families. 
 
 ## What we don't collect
 
-- We never store your phone's location. If you allow location, it is used only on your phone to work out how far away items are.
-- Before a photo is uploaded, the app re-saves it, which removes hidden location data.
+- We never store your phone's location. If you allow location, it is used only on your phone to work out how far away items are. It is not sent to CoW and not saved.
+- Before a photo is uploaded, the app re-saves it, which removes hidden location data. The app checks this and refuses to upload a photo that still has it.
+- The camera is used only when you tap to take a photo of an item. The app can only see photos you choose.
 - We don't use ads, analytics, or tracking, and we don't sell or share your information for marketing.
 
 ## How we use it
@@ -39,8 +40,14 @@ We use your information only to run the app: to sign you in, show listings, arra
 
 - **Supabase** stores the app's data and photos on servers in the United States. It also sends sign-in codes by email, using our email delivery service.
 - **Apple**, if you choose Sign in with Apple.
-- **Your phone's map service (Apple or Google)** may look up the address you type, to estimate the item's approximate location.
+- **Your phone's maps app (Apple or Google)**, only if a volunteer taps Open in Maps on an accepted pickup. The pickup address is then passed to that app for directions.
+- **US Census ZIP code data** (public) gives each listing its approximate location. No lookup of your street address is made.
+- **GitHub** hosts the About CoW text the app downloads. Nothing about you is sent to get it.
 - **Zeffy** runs CoW's donation page, if you choose to donate money. This happens in your web browser, not in the app.
+
+## What is kept on your phone
+
+So the app still works without a connection, it keeps a copy of some of what you have already seen (your profile, your listings and pickups, nearby items, and CoW's impact total) on your phone for up to 7 days. Exact addresses and your location are never kept this way. Signing out erases this copy.
 
 ## Children and teens
 
