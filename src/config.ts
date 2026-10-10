@@ -29,8 +29,8 @@ export const WEBSITE_URL = 'https://childrenofwarproject.org';
 /**
  * "Join the Movement" form. The website's own "Join" menu link points to the #ambassador
  * section, which contains the sign-up form (there is no #join anchor on the site).
- * TODO(Devarsh): on your phone, tap Me -> Join the Movement and confirm it scrolls to the form.
- * If it doesn't, change this to WEBSITE_URL.
+ * Confirmed on a phone on Oct 10, 2026. If the site changes and it stops landing on the form,
+ * change this to WEBSITE_URL.
  */
 export const JOIN_URL = 'https://childrenofwarproject.org/#ambassador';
 

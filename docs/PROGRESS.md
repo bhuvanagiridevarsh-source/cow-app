@@ -6,12 +6,14 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 4: CoW content & About** (normal effort). Steps 4.1–4.4 are built, pushed, and all 6 checks pass (159 unit tests). It's **waiting for phone check #4** (checklist at the bottom).
+**Phase 5: Listing items** (normal effort). Not started: waiting for the user's "ready."
+
+Phase 4 closed on Oct 10 with phone check #4 at 10/10 and all 6 checks passing (159 unit tests).
 
 ## Next step
 
-1. The user reloads the app and runs phone check #4, then reports ✓ or ✗ per line.
-2. Fix anything that fails, push, and announce Phase 5 (normal effort).
+1. The user says "ready" for Phase 5.
+2. Step 5.1: the 4-step listing flow (category; photo, value, condition, day and window buttons; address with ZIP check; review and post), including the minor-donor checkbox (D3). Read the Expo SDK 57 docs for `expo-image-picker`, `expo-image-manipulator`, and `expo-location` before writing code that uses them.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -73,7 +75,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
   - Free projects pause after 7 days of low activity (restorable for 90 days).
   - The user's existing Supabase org "Blogs" has 3 projects, all paused. None of them are for CoW.
 - **Icons:** import them one at a time from `phosphor-react-native/src/icons/<Name>`; a lint rule blocks root imports. `tsconfig` `paths` maps those imports to the compiled `.d.ts` files, because phosphor's own `.tsx` source fails our type check. The bundle was verified to contain the real icon code.
-- **JOIN_URL** is `#ambassador`: the site has no `#join` anchor, and its own "Join" menu link goes to `#ambassador`.
+- **JOIN_URL** is `#ambassador` (confirmed on a phone, Oct 10): the site has no `#join` anchor, and its own "Join" menu link goes to `#ambassador`.
 - **How migrations were applied to dev.** The Supabase connector can't read local files, so each file is pushed to GitHub, and the database fetches it from `raw.githubusercontent.com` pinned to a commit SHA. It checks the md5 checksum before running it, so the exact committed file runs. The `http` extension is turned on only for that step and removed afterwards.
   - Dev's migration history is out of order (100, 200, 500, 600, 300, 400, 700, 800), because the first batch was sent at once by mistake.
   - The end result is identical to the file order. For production, apply the files in file-name order (SQL Editor, or `supabase db push`).
@@ -99,7 +101,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 4 | Content & About: About screens, photos, Me tab links, live content | ⏳ pending | See the checklist below |
+| 4 | Content & About: About screens, photos, Me tab links, live content | ✅ 10/10 | All lines passed. Join the Movement lands on the website's sign-up form. |
 | 3 | Accounts: email code, Apple, age gate, onboarding, delete | ✅ 8/9 | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in + guardian ✓, delete account ✓. Apple sign-in ✗: not testable in the user's Expo Go (see Next step). Both demo accounts have finished setup. |
 | 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |
 
