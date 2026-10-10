@@ -6,14 +6,12 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 4: CoW content & About** (normal effort). Not started: waiting for the user's "ready."
-
-Phase 3 closed on Oct 10 with phone check #3 at 8/9 and all 6 checks passing (115 unit tests). The user approved closing it with Apple sign-in recorded as built but untested.
+**Phase 4: CoW content & About** (normal effort). Step 4.1 is done; 4.2 is next.
 
 ## Next step
 
-1. The user says "ready" for Phase 4.
-2. Step 4.1: write `content/content.json` (brief §4 + the website), the zod schema, the bundled copy, and the remote fetch with fallback, with tests.
+1. Step 4.2: About screens (story, founder quote, how it works, team, ChangeMakers, board, partners, events, quotes, membership levels), reading from `useContent()`. Extract CoW's photos from `reference/website-home.html` into `assets/content/` and map the `photo` keys in `content.json` to them.
+2. Step 4.3: the Me tab and all its links. Step 4.4: `docs/UPDATING_CONTENT.md`, push, and confirm the live GitHub copy loads in the app.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -52,6 +50,7 @@ Phase 3 closed on Oct 10 with phone check #3 at 8/9 and all 6 checks passing (11
 - [x] 3.4 Onboarding (details, guardian for ages 13–17, Terms). `docs/TERMS.md` and `docs/PRIVACY_POLICY.md` are drafts for the board; they're synced into the app by `npm run sync-legal`, and tests guard it.
 - [x] 3.5 Me tab basics, edit profile, delete account.
 - [x] 3.6 `docs/SUPABASE_SETUP.md`, first version (Parts A and B).
+- [x] 4.1 `content/content.json` (brief §4 + website), rules in `src/features/content/schema.ts` (zod), loader in `load.ts`, and `useContent()`. The app ships the same file it fetches from GitHub, so there is no second copy to keep in sync. Order of preference: valid online copy, then the last good saved copy, then the built-in copy. Events sort themselves into coming up / past by date (`src/domain/events.ts`). 35 new tests.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)

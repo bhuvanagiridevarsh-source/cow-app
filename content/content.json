@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-10-10",
+  "tagline": "Small change for big change.",
+  "headline": "Compassion Driven Change",
+  "intro": "We're students who turn things people no longer need into help for children affected by war, homelessness, and poverty. 100% volunteer-run by high-school students.",
+  "story": {
+    "title": "It all started with a jar of coins.",
+    "paragraphs": [
+      "In 2022, when the bombs started falling in Ukraine, our founder Yuvraaj Kumar was 12 years old. He collected a decade of loose change from his garage, converted it, got his parents to match it, and sent it to help children in Ukraine.",
+      "He and his friend Guntas did this for two years in their schools and neighborhoods. The idea won the Best Social Enterprise Award at the 2024 TiE New Jersey annual gala and became Children of War Project.",
+      "Today we're a student-led team on a simple mission: make it easy, fun, and meaningful for young people to help children affected by war, homelessness, and poverty."
+    ]
+  },
+  "founderQuote": {
+    "text": "In the summer of 2018, when I was visiting Kochi, India, the power went off due to the heavy rains. That night as the flood waters rose, my grandma held my hand and told me that to be useful, instead of cursing the darkness, light a lamp. She then showed me how. It is this spirit of finding a way to be helpful by doing something which gave birth to the CoW project. We are the lamp!",
+    "name": "Yuvraaj Kumar (Yuvi)",
+    "role": "Founder & President"
+  },
+  "howItWorks": {
+    "intro": "Here's how small change becomes real help, and where every dollar goes.",
+    "steps": [
+      {
+        "title": "It starts with outreach",
+        "body": "We raise funds through spare coins, garage and online sales of lightly used items, resold books, illustrated digital storybooks, and technical services such as websites, voice assistants, and AI agents."
+      },
+      {
+        "title": "Students lead the way",
+        "body": "Our student ambassadors lead the sales, drives, and community outreach."
+      },
+      {
+        "title": "CoW pools every dollar",
+        "body": "100% of net proceeds are pooled, and we look for matching donors, so small amounts add up to one meaningful gift."
+      },
+      {
+        "title": "Donated to trusted groups",
+        "body": "Funds go to vetted child-welfare organizations selected by our Board of Trustees & Advisors."
+      },
+      {
+        "title": "You get an annual report",
+        "body": "Donors receive a yearly report showing how the money was spent."
+      }
+    ],
+    "impactNote": "Total Economic Impact = cash raised + in-kind donations + the estimated value of goods and services we provide (websites, storybooks, volunteer time)."
+  },
+  "team": [
+    {
+      "name": "Yuvraaj Kumar (Yuvi)",
+      "role": "Founder & President",
+      "focus": "Strategy, Partnerships & Design",
+      "photo": "yuvraaj-kumar"
+    },
+    {
+      "name": "Dhanvin Challa",
+      "role": "Co-Founder & VP, Marketing",
+      "photo": "dhanvin-challa"
+    },
+    {
+      "name": "Guntas Dhanjal",
+      "role": "Co-Founder & VP, Finance",
+      "photo": "guntas-dhanjal"
+    }
+  ],
+  "changeMakers": [
+    {
+      "name": "Aditi Menon",
+      "role": "ChangeMaker & Technology Lead",
+      "photo": "aditi-menon"
+    },
+    {
+      "name": "Samyuktha Nair",
+      "role": "ChangeMaker, Social Media Lead",
+      "photo": "samyuktha-nair"
+    }
+  ],
+  "board": [
+    {
+      "name": "Wesley Mathews",
+      "bio": "VP State Government Affairs, PSEG. Former President & CEO, Choose New Jersey. Former U.S. Foreign Service diplomat. Chair, NJ–India Commission.",
+      "photo": "wesley-mathews"
+    },
+    {
+      "name": "Lata Setty",
+      "bio": "Attorney turned serial founder. Inaugural investor at How Women Invest Funds I–III. TiE NJ board member.",
+      "photo": "lata-setty"
+    },
+    {
+      "name": "Prema Roddam",
+      "bio": "Attorney in global mobility and corporate immigration. NJBIZ Leader in Law.",
+      "photo": "prema-roddam"
+    },
+    {
+      "name": "Dr. Thomas Abraham",
+      "bio": "Founder, President & Chairman, GOPIO. President, Innovative Research and Products, Inc.",
+      "photo": "thomas-abraham"
+    }
+  ],
+  "featuredPartner": {
+    "name": "Voices of Children",
+    "location": "Ukraine",
+    "description": "A charitable foundation providing psychological support and care to tens of thousands of war-affected children.",
+    "quote": {
+      "text": "Where there is war, there we are too — so that children can have a childhood despite everything.",
+      "name": "Olena Rozvadovska",
+      "role": "Co-founder, Voices of Children"
+    }
+  },
+  "partners": [
+    { "name": "Shradhaa Foundation", "url": "http://shradhaa.org" },
+    { "name": "Voices of Children" },
+    { "name": "Save Kids Trust" },
+    { "name": "American Red Cross" },
+    { "name": "World Central Kitchen" },
+    { "name": "UNICEF" },
+    { "name": "The Indus Entrepreneurs (TiE)", "url": "https://tie.org" },
+    { "name": "Enspire Academy", "url": "https://www.enspireacademy.com" },
+    { "name": "Cedar Hill Preparatory School", "note": "NJ" },
+    { "name": "Monroe Indians for Civic Action", "note": "NJ" }
+  ],
+  "events": [
+    {
+      "title": "\"Why Invest in Women\" Summit",
+      "subtitle": "The Peace Blueprint: Youth Perspectives",
+      "startDate": "2026-10-03",
+      "endDate": "2026-10-04",
+      "time": "10:00 AM–12:30 PM ET",
+      "location": "Online (Eventbrite)",
+      "note": "Yuvraaj Kumar is a guest speaker on Oct 4.",
+      "url": "https://VirtualSummits.RituChopra.com/"
+    },
+    {
+      "title": "CoW's first garage sale",
+      "startDate": "2026-08-16",
+      "location": "Monroe Twp, NJ"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Every single minute matters. Every single child matters. Every single childhood matters.",
+      "name": "Kailash Satyarthi",
+      "role": "Nobel Peace Laureate"
+    },
+    {
+      "text": "Where there is war, there we are too — so that children can have a childhood despite everything.",
+      "name": "Olena Rozvadovska",
+      "role": "Co-founder, Voices of Children"
+    }
+  ],
+  "membershipLevels": [
+    {
+      "name": "Volunteer",
+      "requirement": "No contribution needed",
+      "perks": ["Free CoW coin jar", "Starter kit: flyers, tips, and a community", "Volunteer / service hours"]
+    },
+    {
+      "name": "Supporter",
+      "requirement": "Volunteer, donate, or raise $100",
+      "perks": ["Everything above", "A digital certificate of appreciation"]
+    },
+    {
+      "name": "Activist",
+      "requirement": "Volunteer, donate, or raise $250",
+      "perks": ["Everything above", "Lead your own mini-campaign with CoW support", "A spot on the Change Maker Wall"]
+    },
+    {
+      "name": "Ambassador",
+      "requirement": "Volunteer, donate, or raise $500",
+      "perks": ["Everything above", "A leadership role", "A service-hours letter", "A spotlight feature"]
+    },
+    {
+      "name": "Change Maker",
+      "requirement": "Volunteer, donate, or raise $1,000",
+      "perks": [
+        "Everything above",
+        "Mentoring sessions with the founders",
+        "A personalized college recommendation letter",
+        "A free copy of The Founders Compass"
+      ]
+    }
+  ]
+}

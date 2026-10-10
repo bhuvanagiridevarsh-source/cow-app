@@ -8,6 +8,8 @@ export const STORAGE_KEYS = {
   ageBlockedUntil: 'cow:age-blocked-until',
   /** One-time message to show on the next screen (e.g. "Your account was deleted"). */
   notice: 'cow:notice',
+  /** The last good copy of the About content downloaded from GitHub (shown when offline). */
+  contentCache: 'cow:content-cache',
 } as const;
 
 /** Reads JSON from phone storage. Returns null if missing, unreadable, or storage is unavailable. */
