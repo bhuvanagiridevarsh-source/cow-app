@@ -55,7 +55,8 @@ export default function VerifyScreen() {
     setError(null);
     setInfo(null);
     try {
-      await sendEmailCode(email);
+      // The login already exists by now (the first code created it, or it's an existing account).
+      await sendEmailCode(email, false);
       setCooldown(RESEND_SECONDS);
       setInfo('We sent a new code. It can take a minute to arrive.');
     } catch (e) {

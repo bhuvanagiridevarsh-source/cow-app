@@ -6,11 +6,17 @@ import { supabase, type UserRole } from '@/lib/supabase';
 
 const PHOTO_BUCKET = 'item-photos';
 
-/** Step 1 of email sign-in: email a one-time code (also creates the login for new people). */
-export async function sendEmailCode(email: string): Promise<void> {
+/**
+ * Step 1 of email sign-in: email a one-time code.
+ *
+ * `allowNewAccount` must be true only after the person has answered the age question on this
+ * phone. When it's false, an email we don't know gets no login and no email at all, so the app
+ * never stores an address (possibly a young child's) from someone who skipped the age question.
+ */
+export async function sendEmailCode(email: string, allowNewAccount: boolean): Promise<void> {
   const { error } = await supabase.auth.signInWithOtp({
     email: normalizeEmail(email),
-    options: { shouldCreateUser: true },
+    options: { shouldCreateUser: allowNewAccount },
   });
   if (error) throw error;
 }

@@ -1,3 +1,4 @@
+import { ITEM_COLUMNS } from '@/domain/api-columns';
 import { parseValue, type ListingDraft } from '@/domain/listing';
 import { windowRange } from '@/domain/pickup-windows';
 import { normalizeZip } from '@/domain/zip';
@@ -5,14 +6,15 @@ import type { Database } from '@/lib/database.types';
 import { removePhoto, shrinkPhoto, uploadPhoto, type PickedPhoto } from '@/lib/photos';
 import { supabase } from '@/lib/supabase';
 
-export type Item = Database['public']['Tables']['items']['Row'];
+/** A listing as the app can read it (see src/domain/api-columns.ts for the one private column). */
+export type Item = Omit<Database['public']['Tables']['items']['Row'], 'adult_home_confirmed'>;
 export type ItemAddress = Database['public']['Tables']['item_addresses']['Row'];
 
 /** Everything the signed-in person has listed, newest first. */
 export async function fetchMyItems(userId: string): Promise<Item[]> {
   const { data, error } = await supabase
     .from('items')
-    .select('*')
+    .select(ITEM_COLUMNS)
     .eq('donor_id', userId)
     .order('created_at', { ascending: false });
   if (error) throw error;
@@ -22,7 +24,7 @@ export async function fetchMyItems(userId: string): Promise<Item[]> {
 /** One of the person's own listings with its private address (for editing). */
 export async function fetchMyItem(itemId: string): Promise<{ item: Item; address: ItemAddress }> {
   const [item, address] = await Promise.all([
-    supabase.from('items').select('*').eq('id', itemId).single(),
+    supabase.from('items').select(ITEM_COLUMNS).eq('id', itemId).single(),
     supabase.from('item_addresses').select('*').eq('item_id', itemId).single(),
   ]);
   if (item.error) throw item.error;

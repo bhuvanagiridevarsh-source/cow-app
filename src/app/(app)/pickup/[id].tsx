@@ -238,7 +238,6 @@ export default function PickupScreen() {
                 : `${other.completed_pickups} pickups completed with CoW.`}
           </AppText>
         ) : null}
-        {viewer === 'donor' && pickup.adult_attending ? <AppText>An adult is coming with them.</AppText> : null}
       </Card>
 
       <Card>

@@ -32,3 +32,17 @@ export function friendlyAuthError(error: unknown): string {
   }
   return friendlyError(error);
 }
+
+/** Shown when someone uses "I already have an account" with an email we don't know. */
+export const NO_ACCOUNT_MESSAGE =
+  "We couldn't find an account with that email. To create one, go back and choose how you want to help.";
+
+/**
+ * True when the sign-in service refused to send a code because the email has no account and
+ * new accounts weren't allowed for this request (its code is "otp_disabled").
+ */
+export function isNoAccountError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const e = error as { code?: unknown; message?: unknown };
+  return e.code === 'otp_disabled' || (typeof e.message === 'string' && /signups? not allowed/i.test(e.message));
+}

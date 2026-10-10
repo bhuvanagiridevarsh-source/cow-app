@@ -143,11 +143,14 @@ export default function DonateScreen() {
               );
             }
             const expired = isWindowOver(item.pickup_window_end);
+            // Reported listings are hidden from others until CoW has looked at them.
+            const note = item.hidden_at
+              ? 'This listing is hidden while CoW reviews it. You can email CoW with questions.'
+              : expired
+                ? 'The pickup time has passed. Choose a new time so volunteers can see it.'
+                : undefined;
             return (
-              <ItemCard
-                key={item.id}
-                item={item}
-                note={expired ? 'The pickup time has passed. Choose a new time so volunteers can see it.' : undefined}>
+              <ItemCard key={item.id} item={item} note={note}>
                 <Button
                   label={expired ? 'Choose a new time' : 'Edit'}
                   variant={expired ? 'secondary' : 'outline'}

@@ -252,7 +252,7 @@ describe('draftFromItem (editing a listing)', () => {
   const item = {
     id: 'i1', donor_id: 'u1', category: 'electronics', title: 'Monitor', value: 80, condition: 'good',
     photo_path: 'u1/abcdefgh.jpg', pickup_window_start: start, pickup_window_end: end, town: 'Monroe Twp',
-    approx_lat: 40.33, approx_lng: -74.44, status: 'listed', adult_home_confirmed: true, hidden_at: null,
+    approx_lat: 40.33, approx_lng: -74.44, status: 'listed', hidden_at: null,
     created_at: start, updated_at: start, confirmed_at: null,
   } as const;
   const address = { item_id: 'i1', street: '12 Maple St', unit: null, zip: '08831', pickup_note: 'Garage', exact_lat: null, exact_lng: null };
@@ -261,7 +261,7 @@ describe('draftFromItem (editing a listing)', () => {
     expect(draftFromItem(item, address, NOW)).toEqual({
       category: 'electronics', title: 'Monitor', value: '80', condition: 'good',
       day: '2026-10-17', window: 'afternoon', photoPath: 'u1/abcdefgh.jpg', photoUri: null,
-      street: '12 Maple St', unit: '', town: 'Monroe Twp', zip: '08831', note: 'Garage', adultHome: true,
+      street: '12 Maple St', unit: '', town: 'Monroe Twp', zip: '08831', note: 'Garage', adultHome: false,
     });
   });
   it('leaves the pickup time blank once it has passed', () => {

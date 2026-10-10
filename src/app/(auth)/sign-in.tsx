@@ -14,7 +14,7 @@ import { TextLink } from '@/components/ui/text-link';
 import { OTP_LENGTH, PASSWORD_SIGN_IN_EMAILS } from '@/config';
 import { isValidEmail, normalizeEmail, usesPasswordSignIn } from '@/domain/auth';
 import { sendEmailCode, signInWithApple, signInWithPassword } from '@/features/auth/api';
-import { friendlyAuthError } from '@/features/auth/auth-errors';
+import { friendlyAuthError, isNoAccountError, NO_ACCOUNT_MESSAGE } from '@/features/auth/auth-errors';
 import { useDeviceState } from '@/features/device-state';
 import { space } from '@/theme';
 
@@ -37,6 +37,9 @@ export default function SignInScreen() {
 
   const passwordMode = usesPasswordSignIn(email, PASSWORD_SIGN_IN_EMAILS);
   const isNewPerson = draft.role !== undefined;
+  // A brand-new login may only be created once the age question has been answered on this
+  // phone (the birthday screen comes before this one for new people, and stops under-13s).
+  const ageAnswered = draft.birthYear !== undefined && draft.birthMonth !== undefined;
 
   const continueWithEmail = async () => {
     if (inFlight.current) return;
@@ -49,11 +52,11 @@ export default function SignInScreen() {
       if (passwordMode) {
         await signInWithPassword(email, password); // the app moves on by itself once signed in
       } else {
-        await sendEmailCode(email);
+        await sendEmailCode(email, ageAnswered);
         router.push({ pathname: '/verify', params: { email: normalizeEmail(email) } });
       }
     } catch (e) {
-      setError(friendlyAuthError(e));
+      setError(!passwordMode && !ageAnswered && isNoAccountError(e) ? NO_ACCOUNT_MESSAGE : friendlyAuthError(e));
     } finally {
       inFlight.current = false;
       setBusy(null);

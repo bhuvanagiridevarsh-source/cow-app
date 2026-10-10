@@ -1,6 +1,7 @@
 import { ageBlockedUntil, isAgeBlocked } from '@/domain/age';
 import { cleanCode, isValidEmail, joinName, normalizeEmail, usesPasswordSignIn } from '@/domain/auth';
 import { deriveAppStatus } from '@/features/auth/app-status';
+import { isNoAccountError, NO_ACCOUNT_MESSAGE } from '@/features/auth/auth-errors';
 
 describe('age block for under-13 visitors', () => {
   it('lasts until the month after they turn 13', () => {
@@ -65,5 +66,21 @@ describe('deriveAppStatus', () => {
   });
   it('opens the app otherwise', () => {
     expect(deriveAppStatus(base)).toBe('ready');
+  });
+});
+
+describe('signing in with an email that has no account', () => {
+  it('recognizes the sign-in service’s "no new accounts" answer', () => {
+    expect(isNoAccountError({ code: 'otp_disabled', message: 'Signups not allowed for otp' })).toBe(true);
+    expect(isNoAccountError({ message: 'Signups not allowed for otp' })).toBe(true);
+  });
+  it('does not mistake other problems for it', () => {
+    expect(isNoAccountError({ code: 'over_email_send_rate_limit', message: 'Too many requests' })).toBe(false);
+    expect(isNoAccountError(new Error('Network request failed'))).toBe(false);
+    expect(isNoAccountError(null)).toBe(false);
+    expect(isNoAccountError('otp_disabled')).toBe(false);
+  });
+  it('tells the person how to create an account', () => {
+    expect(NO_ACCOUNT_MESSAGE).toMatch(/go back and choose how you want to help/);
   });
 });

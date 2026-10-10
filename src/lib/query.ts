@@ -37,7 +37,7 @@ const persister = createAsyncStoragePersister({
 export const persistOptions: PersistQueryClientProviderProps['persistOptions'] = {
   persister,
   maxAge: SAVED_FOR_MS,
-  buster: 'v1',
+  buster: 'v2',
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => shouldSaveQuery(query.queryKey, query.state.status),
   },

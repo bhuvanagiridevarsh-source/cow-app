@@ -28,7 +28,11 @@ export function usePickup(pickupId: string | undefined) {
 
 /** Every pickup this person is part of. */
 export function useMyPickups(userId: string | null) {
-  return useQuery({ queryKey: ['my-pickups', userId], queryFn: fetchMyPickups, enabled: !!userId });
+  return useQuery({
+    queryKey: ['my-pickups', userId],
+    queryFn: () => fetchMyPickups(userId as string),
+    enabled: !!userId,
+  });
 }
 
 /** Hours, limits, and age rules for the signed-in person. */

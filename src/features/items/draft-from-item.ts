@@ -20,6 +20,7 @@ export function draftFromItem(item: Item, address: ItemAddress, now: Date = new 
     town: item.town,
     zip: address.zip,
     note: address.pickup_note ?? '',
-    adultHome: item.adult_home_confirmed,
+    // Never pre-ticked: a donor under 18 confirms again each time (and the app can't read the old answer).
+    adultHome: false,
   };
 }

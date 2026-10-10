@@ -47,7 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => {
         if (active) setAuthLoaded(true);
       });
-    const { data } = supabase.auth.onAuthStateChange((_event, next) => {
+    const { data } = supabase.auth.onAuthStateChange((event, next) => {
+      // However the sign-out happened (here, on another device, or an expired sign-in),
+      // nothing of that person's stays behind on this phone.
+      if (event === 'SIGNED_OUT') void clearSavedData();
       setSession(next);
       setAuthLoaded(true);
     });

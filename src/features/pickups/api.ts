@@ -1,3 +1,4 @@
+import { ITEM_COLUMNS, PICKUP_COLUMNS } from '@/domain/api-columns';
 import type { Point } from '@/domain/distance';
 import type { ReportReason } from '@/domain/pickup-text';
 import { parseStats, type MyStats, type RequestResult } from '@/domain/requests';
@@ -5,7 +6,8 @@ import type { Item, ItemAddress } from '@/features/items/api';
 import type { Database } from '@/lib/database.types';
 import { supabase } from '@/lib/supabase';
 
-export type Pickup = Database['public']['Tables']['pickups']['Row'];
+/** A pickup as the app can read it (see src/domain/api-columns.ts for the one private column). */
+export type Pickup = Omit<Database['public']['Tables']['pickups']['Row'], 'adult_attending'>;
 
 /** What each side may know about the other (never a full name, email, or ZIP). */
 export type Counterpart = {
@@ -19,7 +21,7 @@ export type Counterpart = {
 export async function fetchOpenItems(userId: string): Promise<Item[]> {
   const { data, error } = await supabase
     .from('items')
-    .select('*')
+    .select(ITEM_COLUMNS)
     .eq('status', 'listed')
     .is('hidden_at', null)
     .gt('pickup_window_end', new Date().toISOString())
@@ -32,7 +34,7 @@ export async function fetchOpenItems(userId: string): Promise<Item[]> {
 
 /** One listing, or null if it's gone or this person isn't allowed to see it. */
 export async function fetchItem(itemId: string): Promise<Item | null> {
-  const { data, error } = await supabase.from('items').select('*').eq('id', itemId).maybeSingle();
+  const { data, error } = await supabase.from('items').select(ITEM_COLUMNS).eq('id', itemId).maybeSingle();
   if (error) throw error;
   return data;
 }
@@ -83,12 +85,12 @@ function parseCounterpart(input: unknown): Counterpart {
 
 /** Everything the pickup screen shows. Null if the pickup doesn't exist or isn't this person's. */
 export async function fetchPickup(pickupId: string): Promise<PickupDetail | null> {
-  const { data: pickup, error } = await supabase.from('pickups').select('*').eq('id', pickupId).maybeSingle();
+  const { data: pickup, error } = await supabase.from('pickups').select(PICKUP_COLUMNS).eq('id', pickupId).maybeSingle();
   if (error) throw error;
   if (!pickup) return null;
   const itemId = pickup.item_id;
   const [item, address, other] = await Promise.all([
-    itemId ? supabase.from('items').select('*').eq('id', itemId).maybeSingle() : null,
+    itemId ? supabase.from('items').select(ITEM_COLUMNS).eq('id', itemId).maybeSingle() : null,
     // The database returns no row here unless this person is allowed to see the address.
     itemId ? supabase.from('item_addresses').select('*').eq('item_id', itemId).maybeSingle() : null,
     supabase.rpc('pickup_counterpart', { p_pickup_id: pickupId }),
@@ -104,11 +106,15 @@ export async function fetchPickup(pickupId: string): Promise<PickupDetail | null
   };
 }
 
-/** Every pickup this person is part of, as volunteer or donor, newest first. */
-export async function fetchMyPickups(): Promise<Pickup[]> {
+/**
+ * Every pickup this person is part of, as volunteer or donor, newest first.
+ * The filter matters for CoW admins, whom the database lets see everyone's pickups.
+ */
+export async function fetchMyPickups(userId: string): Promise<Pickup[]> {
   const { data, error } = await supabase
     .from('pickups')
-    .select('*')
+    .select(PICKUP_COLUMNS)
+    .or(`volunteer_id.eq.${userId},donor_id.eq.${userId}`)
     .order('requested_at', { ascending: false })
     .limit(200);
   if (error) throw error;

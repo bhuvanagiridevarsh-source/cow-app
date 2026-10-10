@@ -274,6 +274,15 @@ begin
   if n = 0 then passed := passed + 1; else failed := array_append(failed, 'D2 stranger read the donor''s private profile'); end if;
   select count(*) into n from public.profiles;
   if n = 1 then passed := passed + 1; else failed := array_append(failed, 'D3 user can see profiles other than their own'); end if;
+  -- A listing must not reveal that its donor is under 18 (only minors tick "an adult will be home").
+  begin
+    select count(*) into n from public.items where adult_home_confirmed;
+    failed := array_append(failed, 'D4 stranger could tell which listings come from under-18 donors');
+  exception when others then
+    if sqlstate = '42501' then passed := passed + 1; else failed := array_append(failed, 'D4 wrong error: ' || sqlerrm); end if;
+  end;
+  select count(*) into n from public.items where title = 'Teen table' and town = 'Monroe Township' and status = 'listed';
+  if n = 1 then passed := passed + 1; else failed := array_append(failed, 'D5 the rest of a listing must stay readable'); end if;
   -- Storage: a stranger can see the photo of a visible listing, but can't upload into someone else's folder.
   select count(*) into n from storage.objects where bucket_id = 'item-photos' and name = donor::text || '/testphoto0001.jpg';
   if n = 1 then passed := passed + 1; else failed := array_append(failed, 'H1 photo of a visible listing not viewable'); end if;
@@ -345,6 +354,15 @@ begin
   end;
 
   perform set_config('request.jwt.claims', json_build_object('sub', donor, 'role', 'authenticated')::text, true);
+  -- A donor must not be able to tell that a volunteer is under 18 (only minors tick "an adult will come").
+  begin
+    select count(*) into n from public.pickups where adult_attending;
+    failed := array_append(failed, 'E27 donor could tell which volunteers are under 18');
+  exception when others then
+    if sqlstate = '42501' then passed := passed + 1; else failed := array_append(failed, 'E27 wrong error: ' || sqlerrm); end if;
+  end;
+  select count(*) into n from public.pickups where id = pk_a and status = 'requested' and item_title = 'Oak desk';
+  if n = 1 then passed := passed + 1; else failed := array_append(failed, 'E28 the rest of a pickup must stay readable to the donor'); end if;
   perform public.respond_to_request(pk_a, true);
   select public.pickup_counterpart(pk_a) into v_json;
   if v_json ->> 'display_name' = 'Val T.' and v_json::text not like '%@%' then passed := passed + 1;
@@ -486,6 +504,12 @@ begin
   perform set_config('request.jwt.claims', json_build_object('sub', stranger3, 'role', 'authenticated')::text, true);
   select count(*) into n from public.reports;
   if n = 1 then passed := passed + 1; else failed := array_append(failed, 'F4 users can see other people''s reports'); end if;
+  begin
+    select count(*) into n from public.reports where admin_notes is not null;
+    failed := array_append(failed, 'F7 reporter could read CoW''s private notes on a report');
+  exception when others then
+    if sqlstate = '42501' then passed := passed + 1; else failed := array_append(failed, 'F7 wrong error: ' || sqlerrm); end if;
+  end;
   begin
     perform public.report('unsafe', null, null, pk_a);
     failed := array_append(failed, 'F5 reported a pickup they are not part of');
