@@ -6,17 +6,34 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 10: Final pre-submission review** (**MAX effort**). Not started: waiting for the user to set effort to MAX and say "ready."
+**Phase 10: Final pre-submission review** (MAX effort). Steps 10.1, 10.2, and 10.4 are done and pushed. Step 10.3 (the Definition of Done walkthrough) is **waiting for the user's five checks** in "Phone check #10" at the bottom.
 
-Phase 9 closed on Oct 10: the user judged the icon good enough to take to CoW for approval, and the app still runs in Expo Go. All 6 checks pass (258 unit tests).
+All 6 checks pass on the user's Mac and on a brand-new copy cloned from GitHub (266 unit tests). All 83 database security tests pass against cow-app-dev.
 
 ## Next step
 
-1. The user says "ready" for Phase 10.
-2. Step 10.1: all six checks from a fresh clone of the repo.
-3. Step 10.2: re-run the 78 database security tests against dev and check the Security Advisor.
-4. Step 10.3: walk through the brief's §12 Definition of Done with the user and fix anything wrong.
-5. Step 10.4: a full security, privacy, and brief-compliance review of the code and docs.
+1. The user runs phone check #10 (bottom of this file) and reports.
+2. Fix anything that fails. Then V1 is code-complete, and what remains is `docs/LAUNCH_CHECKLIST.md` (accounts, board review, production database, first real build).
+
+## Phase 10 findings (all fixed unless marked open)
+
+**10.1 Fresh copy**
+- The type check **failed on a fresh clone** and passed only on the user's Mac, because of a helper file Expo generates locally (`expo-env.d.ts`). Fixed in `src/components/pickup-timeline.tsx`. `npm run typecheck` now also checks the code the way a fresh clone sees it (`tsconfig.fresh-clone.json`), so this can't recur unnoticed.
+
+**10.2 Database**
+- Baseline: 78/78 passed. After the fixes below: **83/83**. Security Advisor: no errors, 1 expected warning (leaked-password protection; a dashboard setting).
+
+**10.4 Security, privacy, and brief review**
+- **Minor status was readable (fixed).** Anyone signed in could read `items.adult_home_confirmed`, which only donors under 18 tick, so they could tell which listings (and homes) belong to minors. A donor could read `pickups.adult_attending` and tell a volunteer was a minor. The app never showed the first; it did show the second ("An adult is coming with them"), which is now removed. Migration `20261010000200_private_columns.sql` limits the app to an explicit list of columns on `items`, `pickups`, and `reports`. Five new database tests prove it; run before the fix, exactly the three leak tests failed.
+- **Admin notes on reports were readable by the reporter (fixed)** in the same migration.
+- **A login could be created before the age question (fixed).** "I already have an account" created a login and sent an email for any address, so a child's email could be stored without ever seeing the age screen. Email sign-in now refuses unknown addresses unless the age question was answered on that phone. Sign in with Apple still creates the login first; the age question follows immediately and an under-13 login is deleted.
+- **Saved offline data survived some sign-outs (fixed).** It was erased only when the person tapped Sign out. It is now erased on every sign-out, including one forced from another device.
+- **Admins loaded everyone's pickups (fixed).** "My pickups" relied on the database to filter, but admins may see all pickups. It now filters to the signed-in person.
+- **Donors weren't told a listing was hidden for review (fixed).** The Donate tab now says so.
+- **Android would back up the saved sign-in to Google (fixed):** `android.allowBackup` is now false.
+- **Two iOS permission messages had vague default wording (fixed),** and **Apple's privacy manifest was missing (fixed):** `ios.privacyManifests` in `app.json`. Verified by generating the real iOS and Android projects in a scratch folder: strict network security, specific wording everywhere, tracking off.
+- **Checked and clean:** no secrets anywhere in the git history, `.env` never committed, no logging of personal data, no ad, analytics, or tracking libraries, no "tax-deductible", every link resolves (tie.org refused the automated check; the user taps it once).
+- **Open, documented in LAUNCH_CHECKLIST:** library audit warnings are in build tools except one low-risk web-address reader inside the navigation library (fixed in the next Expo SDK); Android's permission list should be reviewed before the Android release; Sign in with Apple, the success buzz, and the real icon and launch screen need a real build; Apple sign-in token revocation is not built.
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -78,6 +95,10 @@ Phase 9 closed on Oct 10: the user judged the icon good enough to take to CoW fo
 - [x] 9.2 `eas.json` with development, preview, and production profiles, each tied to an EAS environment for the Supabase keys. Camera, photo, and location permission wording is in `app.json`. `ITSAppUsesNonExemptEncryption` is set to false (the app only uses standard HTTPS).
 - [x] 9.3 Docs: `README.md`, `ADMIN_GUIDE.md`, `LAUNCH_CHECKLIST.md`, `STORE_LISTING.md`, `CREDITS.md`, and `SUPABASE_SETUP.md` Part C. `PRIVACY_POLICY.md` was corrected to match the app (no address lookup; what is kept on the phone; camera and maps) and is now version 2026-10-10. `TERMS.md` is unchanged, so nobody is asked to accept again.
 - [x] Migration `20261010000100_admin_cleanup.sql` adds `admin.cleanup_unfinished_signups()` and is applied to dev. Tested in a rolled-back transaction: it removed a 3-day-old empty login, kept a 2-hour-old one, kept every finished account, and refused 0 hours. The app's roles cannot run it.
+- [x] 10.1 Six checks from a fresh clone: found and fixed one failure; now pass (commit b7e5501 and later).
+- [x] 10.2 Database security tests re-run against dev: 83/83. Advisor checked.
+- [x] 10.4 Security, privacy, and brief-compliance review: see "Phase 10 findings" above.
+- [ ] 10.3 Definition of Done walkthrough with the user (phone check #10).
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -125,6 +146,7 @@ Phase 9 closed on Oct 10: the user judged the icon good enough to take to CoW fo
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 10 | Final review: Definition of Done | ⏳ pending | See below |
 | 9 | Icon, splash, store setup & docs | ✅ passed | Icon judged good enough to take to CoW for approval; the app still runs in Expo Go. The real icon and launch screen need a preview build to check on a phone. |
 | 8 | Offline, accessibility & polish | ✅ passed | The user reported all good. |
 | 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
@@ -253,3 +275,23 @@ Expo Go can't show the app's own icon or launch screen (it shows Expo's), so thi
 3. **Still works.** Reload the app in Expo Go: it opens and behaves as before.
 
 The real icon and launch screen are checked on a phone with the first preview build (LAUNCH_CHECKLIST §6).
+
+### Phone check #10 (Definition of Done, brief §12)
+
+| Brief §12 line | Status |
+|---|---|
+| All quality gates pass on a clean clone | ✅ Verified from a fresh GitHub clone |
+| Runs in Expo Go on iPhone with no warnings in the console | ⏳ User check 3 below |
+| Full loop with two real test accounts | ✅ Phone check #6. Re-check quickly after the database change (user check 1) |
+| The RLS test plan passes | ✅ 83/83 on Oct 10 |
+| Airplane mode: opens, shows saved content, friendly message, no crash | ✅ Phone check #8 |
+| Every link works or is hidden; VoiceOver reaches every button | ✅ Links checked automatically (user check 4 for tie.org); VoiceOver in phone check #8 |
+| Every doc in §11 exists in plain English | ✅ |
+
+Shake the phone and tap Reload first. The database changed, so an app that isn't reloaded will show errors.
+
+1. **Still works after the database fix.** Home, Browse, Donate, and Hours all load. Open one item from Browse and one pickup from Hours or Donate. (If any of these shows "We couldn't load this", send a screenshot.)
+2. **No account before the age question.** Sign out. Tap "I already have an account" and enter an email that has never been used: you should see "We couldn't find an account with that email…" and no email should arrive. Then sign in with your real email as usual: it still works.
+3. **No warnings.** Look at the Terminal running Expo while you use the app for a minute. Report any yellow or red messages.
+4. **One link.** About CoW → Partners → The Indus Entrepreneurs (TiE): the site opens.
+5. **A real photo has no hidden location.** In Supabase: Storage → item-photos → open a folder → download one photo you took with the camera. Tell the developer (or Claude) the file name in Downloads so it can be inspected.
