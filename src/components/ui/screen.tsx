@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { OfflineBanner } from '@/components/offline-banner';
 import { usePalette } from '@/hooks/use-theme';
 import { space } from '@/theme';
 
@@ -35,6 +36,7 @@ export function Screen({ children, scroll = true, contentStyle, keyboard = false
   );
   return (
     <SafeAreaView edges={['top']} style={[styles.root, { backgroundColor: p.background }]}>
+      <OfflineBanner />
       {keyboard ? (
         <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           {body}

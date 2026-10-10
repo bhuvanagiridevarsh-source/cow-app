@@ -1,9 +1,10 @@
 import type { Session } from '@supabase/supabase-js';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { deriveAppStatus, type AppStatus } from '@/features/auth/app-status';
 import { TERMS_VERSION } from '@/legal';
+import { clearSavedData } from '@/lib/query';
 import { isSupabaseConfigured, supabase, type Profile } from '@/lib/supabase';
 
 type AuthValue = {
@@ -30,7 +31,6 @@ async function fetchProfile(userId: string): Promise<Profile | null> {
 
 /** Keeps track of who is signed in and whether they've finished sign-up. */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const queryClient = useQueryClient();
   const [session, setSession] = useState<Session | null>(null);
   const [authLoaded, setAuthLoaded] = useState(!isSupabaseConfigured);
 
@@ -85,9 +85,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .signOut({ scope: where === 'everywhere' ? 'global' : 'local' })
         .catch((e: unknown) => ({ error: e }));
       if (error) await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
-      queryClient.clear();
+      // Nothing of this person's stays behind on the phone.
+      await clearSavedData();
     },
-    [queryClient],
+    [],
   );
 
   const value = useMemo<AuthValue>(

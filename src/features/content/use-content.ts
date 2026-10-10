@@ -30,6 +30,7 @@ export function useContent(): Content {
     queryFn: loadContent,
     staleTime: 60 * 60 * 1000,
     retry: false, // loadContent already falls back by itself
+    networkMode: 'always', // it also reads the copy saved on the phone, which works offline
   });
   return data ?? BUNDLED_CONTENT;
 }

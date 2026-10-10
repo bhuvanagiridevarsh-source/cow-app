@@ -4,10 +4,28 @@ import { StyleSheet, View } from 'react-native';
 import { Lamp } from '@/components/lamp';
 import { AppText } from '@/components/ui/app-text';
 import { Button } from '@/components/ui/button';
+import { useIsOnline } from '@/lib/query';
 import { space } from '@/theme';
 
-/** Loading: the lamp glow, never a blank screen. */
+/**
+ * Loading: the lamp glow, never a blank screen. With no connection (and nothing saved to show),
+ * it says so plainly; the screen fills in by itself once the phone is back online.
+ */
 export function Loading({ label = 'Loading' }: { label?: string }) {
+  const online = useIsOnline();
+  if (!online) {
+    return (
+      <View style={styles.center}>
+        <Lamp size={96} glow={0.3} flicker={false} />
+        <AppText variant="heading" style={styles.text}>
+          You&apos;re offline
+        </AppText>
+        <AppText color="muted" style={styles.text}>
+          This will load by itself when you&apos;re back online.
+        </AppText>
+      </View>
+    );
+  }
   return (
     <View style={styles.center} accessibilityRole="progressbar" accessibilityLabel={label}>
       <Lamp size={96} />

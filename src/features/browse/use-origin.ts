@@ -49,6 +49,7 @@ export function useOrigin(zip: string | undefined): Origin {
       }
     },
     staleTime: 5 * 60_000,
+    networkMode: 'always', // the phone finds its own location without the internet
   });
 
   const switchToPhone = useCallback(async () => {

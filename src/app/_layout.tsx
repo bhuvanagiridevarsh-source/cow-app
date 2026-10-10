@@ -6,7 +6,7 @@ import { Nunito_600SemiBold } from '@expo-google-fonts/nunito/600SemiBold';
 import { Nunito_700Bold } from '@expo-google-fonts/nunito/700Bold';
 import { Nunito_800ExtraBold } from '@expo-google-fonts/nunito/800ExtraBold';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -17,7 +17,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AuthProvider, useAuth } from '@/features/auth/auth-provider';
 import { DeviceStateProvider, useDeviceState } from '@/features/device-state';
-import { queryClient, wireQueryManagers } from '@/lib/query';
+import { persistOptions, queryClient, wireQueryManagers } from '@/lib/query';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { palettes } from '@/theme';
 
@@ -47,7 +47,7 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
         <DeviceStateProvider>
           <AuthProvider>
             <ThemeProvider value={navTheme}>
@@ -58,7 +58,7 @@ export default function RootLayout() {
             </ThemeProvider>
           </AuthProvider>
         </DeviceStateProvider>
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </GestureHandlerRootView>
   );
 }

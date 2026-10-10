@@ -24,8 +24,9 @@ export function ItemPhoto({ path, uri, label, style }: Props) {
     <View style={[styles.frame, { backgroundColor: p.surfaceTint }, style]}>
       {source ? (
         <Image
-          source={{ uri: source }}
-          // Signed links change every time; the path stays the same, so cache by path.
+          // Private links change every 30 minutes but the photo doesn't, so the saved copy is
+          // filed under the photo's path. It is then reused instead of downloaded again.
+          source={uri ? { uri: source } : { uri: source, cacheKey: path ?? undefined }}
           cachePolicy="memory-disk"
           recyclingKey={uri ?? path ?? undefined}
           style={StyleSheet.absoluteFill}
