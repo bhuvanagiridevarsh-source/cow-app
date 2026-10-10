@@ -6,15 +6,12 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 8: Offline, accessibility & polish** (normal effort). Not started: waiting for the user's "ready."
-
-Phase 7 closed on Oct 10 with phone check #7 passed and all 6 checks passing (243 unit tests). One fix came out of it: the meter's glow and bar now grow in visibly each time Home appears.
+**Phase 8: Offline, accessibility & polish** (normal effort). Steps 8.1–8.3 are built and pushed, and all 6 checks pass (258 unit tests). The offline and VoiceOver behavior was reviewed in code only; it has not run on a phone. It's **waiting for phone check #8** (checklist at the bottom).
 
 ## Next step
 
-1. The user says "ready" for Phase 8.
-2. Step 8.1: offline saved data (persist the query cache with the already-installed `@tanstack/react-query-persist-client` + `query-async-storage-persister`), an offline banner, and an airplane-mode pass over every screen.
-3. Step 8.2: VoiceOver labels, 44-point targets, the largest text sizes, and contrast. Step 8.3: motion polish, dark mode, and a wording pass (no placeholders, no "tax-deductible").
+1. The user reloads the app, runs phone check #8, and reports ✓ or ✗ per line.
+2. Fix anything that fails, push, and announce Phase 9 (normal effort).
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -69,6 +66,9 @@ Phase 7 closed on Oct 10 with phone check #7 passed and all 6 checks passing (24
 - [x] 7.1 `src/components/impact-meter.tsx`: a Skia glow behind the lamp that grows wider and brighter with progress toward the goal, plus the total, goal, and a bar. The grow-in animation is skipped when Reduce Motion is on.
 - [x] 7.2 Home tab: greeting, an "Up next" card when something needs the person (`src/domain/up-next.ts`), the meter, List an item, Find items to pick up, three nearest items, and Donate money (hidden while the Zeffy link is blank).
 - [x] 7.3 Hours tab: confirmed hours, Share my hours summary (plain text through the Share sheet), level and progress to the next (`src/domain/tiers.ts`), pickups in progress, and recent confirmed pickups.
+- [x] 8.1 Offline: the data cache is saved on the phone for 7 days and reloaded at startup (`src/lib/query.ts`), so the app opens signed in and shows saved screens with no connection. `src/domain/offline.ts` lists exactly what is saved; **exact addresses, the phone's location, and photo links are never saved**, and everything is erased on sign-out. Every screen shows an offline banner, and a screen with nothing saved says "You're offline" instead of loading forever. Photos are cached by their path, so they aren't downloaded again when a private link rotates.
+- [x] 8.2 Accessibility audit: every pressable has a role, a label, and a 44-point target. The contrast tests now cover the pairs added since Phase 1; three failed in the light theme (blue links and grey captions on the light blue and cream cards were 4.3–4.4:1), so `link` and `muted` were darkened slightly. The meter's "Try again" became a proper link.
+- [x] 8.3 Polish: timeline steps ease in when a pickup moves on (off with Reduce Motion). Wording pass: no placeholder text, no "tax-deductible", no emoji used as icons, and no colors outside `src/theme.ts` except the lamp artwork. The only TODOs left are the four pending values in `src/config.ts`.
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -103,6 +103,7 @@ Phase 7 closed on Oct 10 with phone check #7 passed and all 6 checks passing (24
 
 ## Waiting on (not blocking yet)
 
+- [ ] **Offline address trade-off (decide before launch):** a volunteer with no signal at the door can't open a pickup's address unless the screen was already open, because addresses are never saved to the phone. Saving them would fix that but leaves a donor's address on a volunteer's phone.
 - [ ] High-res logo, 1024×1024+ (needed in Phase 9)
 - [ ] Zeffy donation URL (Donate buttons stay hidden until then)
 - [ ] `reference/app-plan.html` (optional)
@@ -114,6 +115,7 @@ Phase 7 closed on Oct 10 with phone check #7 passed and all 6 checks passing (24
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 8 | Offline, accessibility & polish | ⏳ pending | See the checklist below |
 | 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
 | 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
 | 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ✅ 11/11 | All lines passed. "Today" hides windows with under an hour left, so Morning is missing in the afternoon: by design. |
@@ -208,3 +210,25 @@ Shake the phone and tap Reload first. Reply with ✓ or ✗ for each line.
 8. **Share.** "Share my hours summary" opens the iPhone share sheet with a plain-text summary.
 9. **Totals move.** Finish the pickup from line 6 (picked up, then confirmed). The volunteer's hours go up by 1, and the Home total goes up by the item's value.
 10. **Reduce Motion.** Turn on Settings → Accessibility → Motion → Reduce Motion, reopen the app: the glow and bar appear at once, and the flame doesn't flicker.
+
+### Phone check #8 checklist
+
+Shake the phone and tap Reload first, then open Home, Browse, Donate, Hours, and Me once while online (so there is something saved). Reply with ✓ or ✗ for each line.
+
+**Airplane mode**
+1. Turn on Airplane Mode (Wi-Fi off too). A cream strip appears at the top: "You're offline. Showing saved information."
+2. Home, Browse, Donate, Hours, and Me still show what they showed before. Nothing is blank and nothing crashes.
+3. About CoW and all six of its sections open.
+4. Open an item from Browse that you had not opened before: it says "You're offline" with the lamp, not an endless loading screen.
+5. Try to post a listing or request a pickup: a friendly message says you're offline.
+6. Close Expo Go completely, reopen the project still in Airplane Mode: you are still signed in and the saved screens appear. (Expo Go itself may need a connection to load the project; if it can't load at all, mark this line "can't test".)
+7. Turn Airplane Mode off: the strip disappears and the screens refresh by themselves.
+
+**VoiceOver** (Settings → Accessibility → VoiceOver; triple-click the side button if you set that shortcut)
+8. On Home, swipe right through the screen: every button is read with a clear name, and the meter is read as the total and goal.
+9. On Browse, each item card is read as one sentence (name, category, value, town, distance, time).
+10. On a pickup, the timeline is read as "Step 2 of 4: Accepted" (or wherever it is), and each button says what it does.
+
+**Text size and dark mode**
+11. Settings → Display & Brightness → Text Size all the way up: Home, Browse, and a pickup stay readable, with no text cut off or overlapping.
+12. Dark Mode on: Home, Browse, Donate, Hours, Me, and a pickup are all readable.

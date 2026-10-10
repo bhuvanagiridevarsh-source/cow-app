@@ -60,8 +60,8 @@ export const palettes: { light: Palette; dark: Palette } = {
 
     heading: '#0B3C5D', // site --blue-ink
     text: '#173A4E', // site --ink
-    muted: '#5B7488', // site --muted
-    link: '#0277BD', // adjusted: site #0288D1 is 3.9:1 on white
+    muted: '#566F84', // adjusted: site --muted (#5B7488) is 4.3:1 on the light blue tint
+    link: '#026FB0', // adjusted: site #0288D1 is 3.9:1 on white, and #0277BD is 4.3:1 on the tint
 
     brand: '#0288D1', // site --blue-deep
     sky: '#29B6F6', // site --blue

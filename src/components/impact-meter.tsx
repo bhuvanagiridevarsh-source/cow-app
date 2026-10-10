@@ -14,6 +14,7 @@ import Animated, {
 import { Lamp } from '@/components/lamp';
 import { AppText } from '@/components/ui/app-text';
 import { Card } from '@/components/ui/card';
+import { TextLink } from '@/components/ui/text-link';
 import { formatDollars, goalProgress } from '@/domain/format';
 import { useImpact } from '@/features/impact/use-impact';
 import { usePalette } from '@/hooks/use-theme';
@@ -65,7 +66,7 @@ export function ImpactMeter() {
 
   return (
     <Card tone="warm">
-      <View accessible accessibilityRole="progressbar" accessibilityLabel={summary} style={styles.body}>
+      <View accessible={hasData} accessibilityRole="progressbar" accessibilityLabel={summary} style={styles.body}>
         <View style={styles.stage}>
           <Canvas style={StyleSheet.absoluteFill}>
             <Group opacity={glowOpacity}>
@@ -100,9 +101,12 @@ export function ImpactMeter() {
             </AppText>
           </>
         ) : (
-          <AppText color="muted" style={styles.center} onPress={isError ? () => void refetch() : undefined}>
-            {isError ? "We couldn't load the total. Tap to try again." : 'Lighting the lamp…'}
-          </AppText>
+          <>
+            <AppText color="muted" style={styles.center}>
+              {isError ? "We couldn't load the total." : 'Lighting the lamp…'}
+            </AppText>
+            {isError ? <TextLink label="Try again" onPress={() => void refetch()} /> : null}
+          </>
         )}
       </View>
     </Card>

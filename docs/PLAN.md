@@ -252,9 +252,9 @@ This section is technical, so you can skim it. Every change is a SQL file in `su
 |---|---|---|---|
 | navy | `#0B3C5D` | `--blue-ink` | Headings, dark areas |
 | ink | `#173A4E` | `--ink` | Body text |
-| muted | `#5B7488` | `--muted` | Secondary text (4.9:1 contrast on white ✓) |
+| muted | `#566F84` | adjusted (Phase 8) | Secondary text. The site's `#5B7488` passes on white but is only 4.3:1 on the light blue tint. |
 | blue | `#0288D1` | `--blue-deep` | Brand blue for fills and large text |
-| blueText | `#0277BD` | adjusted | Small blue text and links. The site's `#0288D1` is only 3.9:1 on white, which fails AA. |
+| blueText | `#026FB0` | adjusted | Small blue text and links. The site's `#0288D1` is only 3.9:1 on white, and `#0277BD` is 4.3:1 on the light blue tint. |
 | sky | `#29B6F6` | `--blue` | Glows and illustrations only, never text |
 | skySoft | `#E1F5FE` / `#F2FBFF` | `--blue-soft` / `--blue-softer` | Background tints |
 | yellow | `#FFCA28` + text `#5A3D00` | `--yellow`, site button text | Main action buttons |

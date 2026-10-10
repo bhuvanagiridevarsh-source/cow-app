@@ -1,5 +1,6 @@
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
 import { StyleSheet, View } from 'react-native';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
 
 import { AppText } from '@/components/ui/app-text';
 import { TIMELINE_LABELS } from '@/domain/pickup-text';
@@ -10,6 +11,9 @@ import { space } from '@/theme';
 /** Requested → Accepted → Picked up → Confirmed, with the steps done so far filled in. */
 export function PickupTimeline({ status }: { status: PickupStatus }) {
   const p = usePalette();
+  const reduceMotion = useReducedMotion();
+  // Steps fill in smoothly when the pickup moves on.
+  const ease = reduceMotion ? null : { transitionProperty: ['backgroundColor', 'borderColor'], transitionDuration: 350 };
   const current = timelineStep(status);
   const stopped = current < 0;
   const summary = stopped
@@ -23,9 +27,14 @@ export function PickupTimeline({ status }: { status: PickupStatus }) {
           <View key={step} style={styles.step}>
             <View style={styles.track}>
               <View style={[styles.line, { backgroundColor: index === 0 ? 'transparent' : done ? p.success : p.border }]} />
-              <View style={[styles.dot, { backgroundColor: done ? p.success : p.surface, borderColor: done ? p.success : p.border }]}>
+              <Animated.View
+                style={[
+                  styles.dot,
+                  { backgroundColor: done ? p.success : p.surface, borderColor: done ? p.success : p.border },
+                  ease,
+                ]}>
                 {done ? <CheckIcon size={14} weight="bold" color={p.onSuccess} /> : null}
-              </View>
+              </Animated.View>
               <View
                 style={[
                   styles.line,

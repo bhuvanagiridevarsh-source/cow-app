@@ -19,6 +19,11 @@ const pairs: Pair[] = [
   ['muted', 'surfaceWarm', AA],
   ['link', 'background', AA],
   ['link', 'surface', AA],
+  // Pairs used on tinted and warm cards (eyebrows, links, captions, the offline banner).
+  ['heading', 'surfaceTint', AA],
+  ['muted', 'surfaceTint', AA],
+  ['link', 'surfaceTint', AA],
+  ['link', 'surfaceWarm', AA],
   ['onAccent', 'accent', AA],
   ['onAction', 'action', AA],
   ['onSuccess', 'success', AA],
