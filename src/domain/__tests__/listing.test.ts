@@ -1,4 +1,5 @@
 import { addressProblem, detailsProblem, EMPTY_DRAFT, parseValue, type ListingDraft } from '@/domain/listing';
+import { countsTowardLimit, donationGroup, groupDonations } from '@/domain/my-donations';
 import {
   addDays,
   availableWindows,
@@ -14,6 +15,7 @@ import {
   WINDOWS,
 } from '@/domain/pickup-windows';
 import { DEFAULT_ZIP_PREFIXES } from '@/domain/zip';
+import { draftFromItem } from '@/features/items/draft-from-item';
 import { isJpeg, jpegHasGps } from '@/lib/jpeg';
 
 // Saturday Oct 10, 2026, 10:30 AM in New Jersey (daylight time, UTC-4).
@@ -215,5 +217,57 @@ describe('photo location-data check', () => {
     }
     expect(jpegHasGps(new Uint8Array([0xff, 0xd8, 0xff, 0xe1, 0x00, 0x00]))).toBe(false);
     expect(jpegHasGps(new Uint8Array([1, 2, 3, 4, 5]))).toBe(false);
+  });
+});
+
+describe('my donations', () => {
+  it('puts each status in the right group', () => {
+    expect(donationGroup('requested')).toBe('needs_answer');
+    expect(donationGroup('accepted')).toBe('scheduled');
+    expect(donationGroup('collected')).toBe('confirm');
+    expect(donationGroup('listed')).toBe('waiting');
+    expect(donationGroup('confirmed')).toBe('done');
+    expect(donationGroup('removed')).toBe('taken_down');
+    expect(donationGroup('withdrawn')).toBeNull();
+  });
+  it('lists what needs the donor first and drops empty groups', () => {
+    const items = [{ status: 'listed' }, { status: 'confirmed' }, { status: 'requested' }, { status: 'withdrawn' }] as const;
+    expect(groupDonations(items).map((g) => [g.key, g.items.length])).toEqual([
+      ['needs_answer', 1],
+      ['waiting', 1],
+      ['done', 1],
+    ]);
+    expect(groupDonations([])).toEqual([]);
+  });
+  it('counts toward the listing limit exactly like the database', () => {
+    const counted = (['listed', 'requested', 'accepted', 'collected', 'confirmed', 'withdrawn', 'removed'] as const).filter(
+      countsTowardLimit,
+    );
+    expect(counted).toEqual(['listed', 'requested', 'accepted', 'collected']);
+  });
+});
+
+describe('draftFromItem (editing a listing)', () => {
+  const { start, end } = windowRange('2026-10-17', 'afternoon');
+  const item = {
+    id: 'i1', donor_id: 'u1', category: 'electronics', title: 'Monitor', value: 80, condition: 'good',
+    photo_path: 'u1/abcdefgh.jpg', pickup_window_start: start, pickup_window_end: end, town: 'Monroe Twp',
+    approx_lat: 40.33, approx_lng: -74.44, status: 'listed', adult_home_confirmed: true, hidden_at: null,
+    created_at: start, updated_at: start, confirmed_at: null,
+  } as const;
+  const address = { item_id: 'i1', street: '12 Maple St', unit: null, zip: '08831', pickup_note: 'Garage', exact_lat: null, exact_lng: null };
+
+  it('fills the form from the saved listing', () => {
+    expect(draftFromItem(item, address, NOW)).toEqual({
+      category: 'electronics', title: 'Monitor', value: '80', condition: 'good',
+      day: '2026-10-17', window: 'afternoon', photoPath: 'u1/abcdefgh.jpg', photoUri: null,
+      street: '12 Maple St', unit: '', town: 'Monroe Twp', zip: '08831', note: 'Garage', adultHome: true,
+    });
+  });
+  it('leaves the pickup time blank once it has passed', () => {
+    const later = draftFromItem(item, address, new Date('2026-10-18T14:00:00Z'));
+    expect(later.day).toBeNull();
+    expect(later.window).toBeNull();
+    expect(later.title).toBe('Monitor');
   });
 });

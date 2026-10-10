@@ -6,14 +6,12 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 5: Listing items** (normal effort). Not started: waiting for the user's "ready."
-
-Phase 4 closed on Oct 10 with phone check #4 at 10/10 and all 6 checks passing (159 unit tests).
+**Phase 5: Listing items** (normal effort). Steps 5.1–5.3 are built and pushed, and all 6 checks pass (202 unit tests). Nothing here has run on a phone yet. It's **waiting for phone check #5** (checklist at the bottom).
 
 ## Next step
 
-1. The user says "ready" for Phase 5.
-2. Step 5.1: the 4-step listing flow (category; photo, value, condition, day and window buttons; address with ZIP check; review and post), including the minor-donor checkbox (D3). Read the Expo SDK 57 docs for `expo-image-picker`, `expo-image-manipulator`, and `expo-location` before writing code that uses them.
+1. The user restarts `npx expo start --tunnel` (new libraries were installed), then runs phone check #5 and reports ✓ or ✗ per line.
+2. Fix anything that fails, push, and announce Phase 6 (normal effort).
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -56,6 +54,9 @@ Phase 4 closed on Oct 10 with phone check #4 at 10/10 and all 6 checks passing (
 - [x] 4.2 About screens under `src/app/about/` (hub, story, how it works, team, partners, events, levels), open to signed-out visitors from Welcome. CoW's portraits and two photos were extracted from the website snapshot into `assets/content/`; a person without a photo shows initials.
 - [x] 4.3 Me tab: profile card, Ambassador request (button / pending / verified), About, Join the Movement, YouTube, Contact, Terms, Privacy, sign out, delete. Donate and social rows stay hidden while their URLs are blank. "Blocked users" arrives with blocking in Phase 6.
 - [x] 4.4 `docs/UPDATING_CONTENT.md`. Pushed; the live GitHub copy of `content.json` was checked against the local file.
+- [x] 5.1 The 4-step listing flow in `src/app/(app)/list-item/` (category; photo, name, value, condition, day and time; address; review). Rules live in `src/domain/listing.ts` and `src/domain/pickup-windows.ts` (New Jersey time, daylight-saving safe). Minor donors get the adult-home checkbox when the board's rule is on (D3). The same screens edit a listing (`/list-item?id=...`).
+- [x] 5.2 Photo pipeline in `src/lib/photos.ts`: camera (asks permission) or the photo picker (no permission needed), shrink to 1600 px, re-save as JPEG, upload with 3 tries. `src/lib/jpeg.ts` inspects the bytes and **refuses to upload any photo that still carries GPS data**. The photo uploads only when Post is tapped, and is removed again if posting fails.
+- [x] 5.3 Donate tab: listings grouped by what happens next, Edit and Remove for waiting listings, a "choose a new time" prompt once a pickup time passes, the listing limit, pull to refresh, and a Donate money card (hidden while the Zeffy link is blank).
 - [x] 2.5 `supabase/tests/security_and_rules.test.sql`: **78/78 pass**. `docs/RLS_TEST_PLAN.md` written. Supabase security advisor: **0 issues**. Unit tests: 88 pass.
 
 ## Facts found during research (keep in mind)
@@ -101,6 +102,7 @@ Phase 4 closed on Oct 10 with phone check #4 at 10/10 and all 6 checks passing (
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
+| 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ⏳ pending | See the checklist below |
 | 4 | Content & About: About screens, photos, Me tab links, live content | ✅ 10/10 | All lines passed. Join the Movement lands on the website's sign-up form. |
 | 3 | Accounts: email code, Apple, age gate, onboarding, delete | ✅ 8/9 | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in + guardian ✓, delete account ✓. Apple sign-in ✗: not testable in the user's Expo Go (see Next step). Both demo accounts have finished setup. |
 | 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |
@@ -133,3 +135,19 @@ Shake the phone and tap Reload first. Reply with ✓ or ✗ for each line.
 8. **Join the Movement.** It opens the website. Does it land on the sign-up form? (This answers the open question in `src/config.ts`.)
 9. **Request Ambassador.** With the demo volunteer account, tap Request Ambassador: the card changes to "Your request is in."
 10. **Dark mode.** Turn on Dark Mode in iPhone Settings and glance through About: all text is readable.
+
+### Phone check #5 checklist
+
+Restart `npx expo start --tunnel` first (new libraries were installed). Reply with ✓ or ✗ for each line. If any screen shows a red error, send a screenshot of it.
+
+1. **Start.** Donate tab shows "My donations", a "List an item" button, and "Nothing listed yet".
+2. **Step 1.** Tap List an item, then a category: it moves to step 2.
+3. **Camera.** Tap "Take a photo": the phone asks for camera permission with a clear reason, and the photo appears on the screen.
+4. **Photo picker.** Tap "Choose from my photos" and pick one: it replaces the photo, with no permission question.
+5. **Catches mistakes.** Tap Next with the name blank: a friendly message says what's missing.
+6. **Day and time.** The days start at Today and scroll sideways for 3 weeks. Picking a day shows Morning, Afternoon, and Evening with their hours.
+7. **Step 3.** Your ZIP is already filled in. Enter ZIP 10001: Next is refused with a message about New Jersey. Fix it and continue.
+8. **Post.** The review screen shows everything. Tap Post: you land on the Donate tab with the item under "Waiting for a volunteer", photo included.
+9. **Edit.** Tap Edit, change the value, and go through to Save changes: the card shows the new value.
+10. **Remove.** Tap Remove listing, then Remove: the item disappears.
+11. **Minor donor.** With the demo donor account (set up as age 15), step 3 shows the parent/guardian checkbox, and Next is refused until it's ticked.

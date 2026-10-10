@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
+import { KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { usePalette } from '@/hooks/use-theme';
@@ -12,16 +12,22 @@ type Props = {
   contentStyle?: ViewStyle;
   /** Forms: keep the focused field above the keyboard. */
   keyboard?: boolean;
+  /** Pull down to refresh (scrolling screens only). */
+  onRefresh?: () => void;
+  refreshing?: boolean;
 };
 
 /** Standard page: safe-area padding, brand background, optional scrolling. */
-export function Screen({ children, scroll = true, contentStyle, keyboard = false }: Props) {
+export function Screen({ children, scroll = true, contentStyle, keyboard = false, onRefresh, refreshing = false }: Props) {
   const p = usePalette();
   const body = scroll ? (
     <ScrollView
       contentContainerStyle={[styles.content, contentStyle]}
       keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="interactive">
+      keyboardDismissMode="interactive"
+      refreshControl={
+        onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={p.brand} /> : undefined
+      }>
       {children}
     </ScrollView>
   ) : (

@@ -28,6 +28,14 @@
       "expo-router",
       "expo-apple-authentication",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "CoW uses a photo you choose to show the item you are donating.",
+          "cameraPermission": "CoW uses the camera so you can take a photo of the item you are donating.",
+          "microphonePermission": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#FFF6DC",
