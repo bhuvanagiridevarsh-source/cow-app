@@ -1,7 +1,15 @@
 import { Canvas, Circle, Group, RadialGradient, vec } from '@shopify/react-native-skia';
-import { useEffect } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { Easing, useDerivedValue, useReducedMotion, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useDerivedValue,
+  useReducedMotion,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { Lamp } from '@/components/lamp';
 import { AppText } from '@/components/ui/app-text';
@@ -16,7 +24,8 @@ const CENTER = SIZE / 2;
 
 /**
  * CoW's impact meter: the lamp glows wider and brighter as the total grows toward the goal.
- * The glow grows in when the number arrives, unless the phone's Reduce Motion setting is on.
+ * The glow and the bar grow in each time the screen appears, unless the phone's Reduce Motion
+ * setting is on.
  */
 export function ImpactMeter() {
   const p = usePalette();
@@ -24,14 +33,30 @@ export function ImpactMeter() {
   const { data, isError, refetch } = useImpact();
   const progress = data ? goalProgress(data.total, data.goal) : 0;
 
-  const shown = useSharedValue(0);
+  const hasData = !!data;
+  // `target` is how far along the goal we are; `lit` runs 0 -> 1 each time the screen appears.
+  const target = useSharedValue(0);
+  const lit = useSharedValue(0);
   useEffect(() => {
-    shown.set(reduceMotion ? progress : withTiming(progress, { duration: 1400, easing: Easing.out(Easing.cubic) }));
-  }, [progress, reduceMotion, shown]);
+    target.set(progress);
+  }, [progress, target]);
+  useFocusEffect(
+    useCallback(() => {
+      if (!hasData) return;
+      if (reduceMotion) {
+        lit.set(1);
+        return;
+      }
+      lit.set(0);
+      lit.set(withTiming(1, { duration: 1400, easing: Easing.out(Easing.cubic) }));
+    }, [hasData, reduceMotion, lit]),
+  );
 
-  // Even at $0 there is a small glow: the lamp is lit from the first day.
-  const glowRadius = useDerivedValue(() => SIZE * (0.26 + 0.24 * shown.get()));
-  const glowOpacity = useDerivedValue(() => 0.4 + 0.6 * shown.get());
+  // The lamp starts as a small ember and opens up to its full glow. Even at $0 there is some
+  // glow: the lamp is lit from the first day.
+  const glowRadius = useDerivedValue(() => SIZE * (0.16 + (0.1 + 0.24 * target.get()) * lit.get()));
+  const glowOpacity = useDerivedValue(() => 0.2 + (0.2 + 0.6 * target.get()) * lit.get());
+  const barStyle = useAnimatedStyle(() => ({ width: `${Math.max(target.get() * lit.get() * 100, 2)}%` }));
 
   const percent = Math.round(progress * 100);
   const summary = data
@@ -67,11 +92,7 @@ export function ImpactMeter() {
             </AppText>
             <View style={[styles.track, { backgroundColor: p.surface }]}>
               <Animated.View
-                style={[
-                  styles.fill,
-                  { backgroundColor: p.success, width: `${Math.max(percent, 2)}%` },
-                  reduceMotion ? null : { transitionProperty: 'width', transitionDuration: 1400 },
-                ]}
+                style={[styles.fill, { backgroundColor: p.success }, barStyle]}
               />
             </View>
             <AppText variant="small" color="muted" style={styles.center}>
