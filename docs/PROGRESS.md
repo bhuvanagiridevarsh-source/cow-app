@@ -12,10 +12,10 @@ All 6 checks pass (Oct 9, 115 unit tests), after `npx expo install --fix` brough
 
 ## Next step
 
-1. **Apple sign-in can't be tested in the user's Expo Go.** A diagnostic on Oct 9 (iPhone 15 Plus, iOS 27) showed their Expo Go has no `ExpoAppleAuthentication` native module, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included, so the cause is unknown. Try: update Expo Go from the App Store and re-check. If still missing, test Apple sign-in in a real build (Phase 9, needs the Apple Developer account).
-2. The user tests **Delete account** with a throwaway email (not their admin account), and finishes the demo donor's setup screens.
-3. The user decides: close Phase 3 with Apple sign-in recorded as untested, or wait.
-4. Then push and announce Phase 4 (normal effort).
+1. The user decides how to close Phase 3: **with Apple sign-in recorded as "built, untested"** (recommended), or wait for a real build. Everything else in phone check #3 passed.
+2. On their OK: push, then announce Phase 4 (normal effort) and wait for "ready."
+
+**Apple sign-in status.** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go on Oct 9, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build (Phase 9, needs the Apple Developer account). Add to LAUNCH_CHECKLIST.
 
 ## Done
 
@@ -97,7 +97,7 @@ All 6 checks pass (Oct 9, 115 unit tests), after `npx expo install --fix` brough
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 3 | Accounts: email code, Apple, age gate, onboarding, delete | ⏳ in progress | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in ✓, guardian screen ✓ (user's own account). Apple sign-in: not testable in the user's Expo Go. Delete account: not yet tested. |
+| 3 | Accounts: email code, Apple, age gate, onboarding, delete | ✅ 8/9 | Email code ✓, stay signed in ✓, edit profile ✓, legal pages ✓, sign out ✓, under-13 ✓, demo password sign-in + guardian ✓, delete account ✓. Apple sign-in ✗: not testable in the user's Expo Go (see Next step). Both demo accounts have finished setup. |
 | 1 | Foundation: fonts/icons, lamp, Skia glow, smooth resize, bottom sheet, buzz | ✅ 5/6 | Fonts/icons ✓, Skia ✓, resize ✓, bottom sheet ✓. The lamp flicker was too faint, so it was made stronger. Haptics ✗ in Expo Go (skipped safely). |
 
 ### Phone check #3 checklist
