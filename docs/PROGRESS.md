@@ -6,12 +6,15 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 ## Current phase
 
-**Phase 7: Home, Hours & impact meter** (normal effort). Steps 7.1–7.3 are built and pushed, and all 6 checks pass (243 unit tests). Nothing here has run on a phone yet. It's **waiting for phone check #7** (checklist at the bottom).
+**Phase 8: Offline, accessibility & polish** (normal effort). Not started: waiting for the user's "ready."
+
+Phase 7 closed on Oct 10 with phone check #7 passed and all 6 checks passing (243 unit tests). One fix came out of it: the meter's glow and bar now grow in visibly each time Home appears.
 
 ## Next step
 
-1. The user reloads the app, runs phone check #7, and reports ✓ or ✗ per line.
-2. Fix anything that fails, push, and announce Phase 8 (normal effort).
+1. The user says "ready" for Phase 8.
+2. Step 8.1: offline saved data (persist the query cache with the already-installed `@tanstack/react-query-persist-client` + `query-async-storage-persister`), an offline banner, and an airplane-mode pass over every screen.
+3. Step 8.2: VoiceOver labels, 44-point targets, the largest text sizes, and contrast. Step 8.3: motion polish, dark mode, and a wording pass (no placeholders, no "tax-deductible").
 
 **Apple sign-in status (carry to LAUNCH_CHECKLIST in Phase 9).** The user's Expo Go (iPhone 15 Plus, iOS 27) has no `ExpoAppleAuthentication` native module, even after updating Expo Go, so the app correctly hides the button. Expo's SDK 57 docs and Expo Go source both list it as included; the cause is unknown. It must be tested in a real build, which needs the Apple Developer account.
 
@@ -111,7 +114,7 @@ _Last updated: Oct 10, 2026 (Phase 3 closed)_
 
 | # | Phase | Result | Notes |
 |---|---|---|---|
-| 7 | Home, Hours & impact meter | ⏳ pending | See the checklist below |
+| 7 | Home, Hours & impact meter | ✅ passed | Line 2 failed at first (the grow-in was invisible); fixed and re-checked by the user. |
 | 6 | Browse & pickups: the full two-account loop, report, block | ✅ passed | The user reported that everything works. |
 | 5 | Listing: 4-step flow, photo, Donate tab, edit, remove | ✅ 11/11 | All lines passed. "Today" hides windows with under an hour left, so Morning is missing in the afternoon: by design. |
 | 4 | Content & About: About screens, photos, Me tab links, live content | ✅ 10/10 | All lines passed. Join the Movement lands on the website's sign-up form. |
@@ -196,7 +199,7 @@ Restart `npx expo start --tunnel` first (a new library was installed). Use the t
 Shake the phone and tap Reload first. Reply with ✓ or ✗ for each line.
 
 1. **Home.** It greets you by first name and shows the lamp with a soft yellow glow, the impact total, "of $25,000 · 3-year goal", and a green bar.
-2. **Glow grows in.** Pull down to refresh or reopen the app: the glow and bar ease in over about a second.
+2. **Glow grows in.** Tap another tab and come back to Home: the bar fills and the glow opens up over about a second.
 3. **Buttons.** "List an item" opens the listing steps. "Find items to pick up" opens Browse.
 4. **Near you.** With an item listed by the other demo account, Home shows it under "Near you"; tapping it opens the item. "See all" opens Browse.
 5. **Up next (donor).** Request that item as demo volunteer. As demo donor, Home shows an "Up next" card saying someone wants your item; "Answer now" opens the pickup.
