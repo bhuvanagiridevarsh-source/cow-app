@@ -66,7 +66,7 @@ export default function RootLayout() {
 /**
  * Every app state has its own screens; the right ones switch on automatically:
  *   signed out -> (auth)   finishing sign-up -> onboarding   signed in -> (app)
- * Legal pages are reachable from anywhere.
+ * Legal pages and About CoW are reachable from anywhere.
  */
 function RootNavigator({ fontsReady }: { fontsReady: boolean }) {
   const { status } = useAuth();
@@ -98,6 +98,7 @@ function RootNavigator({ fontsReady }: { fontsReady: boolean }) {
           <Stack.Screen name="(app)" />
         </Stack.Protected>
         <Stack.Screen name="legal/[doc]" options={{ presentation: 'modal', animation: 'default' }} />
+        <Stack.Screen name="about" options={{ animation: 'default' }} />
       </Stack.Protected>
     </Stack>
   );

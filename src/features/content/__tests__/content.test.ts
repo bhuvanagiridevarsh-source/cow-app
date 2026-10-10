@@ -1,8 +1,10 @@
 import bundledJson from '../../../../content/content.json';
 
-import { splitEvents } from '@/domain/events';
+import { formatEventDates, njToday, splitEvents } from '@/domain/events';
+import { initials } from '@/domain/format';
 import { isUsableUrl } from '@/domain/urls';
 import { fetchRemoteContent, MAX_CONTENT_BYTES, newerContent, resolveContent } from '@/features/content/load';
+import { BUNDLED_PHOTO_NAMES, photoSource } from '@/features/content/photos';
 import { type Content, parseContent } from '@/features/content/schema';
 
 const bundled = parseContent(bundledJson) as Content;
@@ -210,4 +212,45 @@ describe('splitEvents', () => {
     splitEvents(list, '2026-10-10');
     expect(list[0].startDate).toBe('2026-12-01');
   });
+});
+
+describe('photos', () => {
+  it('every photo named in content.json is built into the app', () => {
+    const people = [...bundled.team, ...bundled.changeMakers, ...bundled.board];
+    expect(people.length).toBe(9);
+    for (const person of people) expect(BUNDLED_PHOTO_NAMES).toContain(person.photo);
+  });
+  it('photoSource picks a built-in photo, a secure link, or nothing', () => {
+    expect(photoSource('yuvraaj-kumar')).toBeTruthy();
+    expect(photoSource('https://example.org/a.jpg')).toEqual({ uri: 'https://example.org/a.jpg' });
+    expect(photoSource('http://example.org/a.jpg')).toBeNull();
+    expect(photoSource('someone-new')).toBeNull();
+    expect(photoSource('')).toBeNull();
+    expect(photoSource(undefined)).toBeNull();
+  });
+});
+
+describe('event dates', () => {
+  it('formats single days and ranges', () => {
+    expect(formatEventDates({ startDate: '2026-08-16' })).toBe('Aug 16, 2026');
+    expect(formatEventDates({ startDate: '2026-08-16', endDate: '2026-08-16' })).toBe('Aug 16, 2026');
+    expect(formatEventDates({ startDate: '2026-10-03', endDate: '2026-10-04' })).toBe('Oct 3–4, 2026');
+    expect(formatEventDates({ startDate: '2026-10-31', endDate: '2026-11-01' })).toBe('Oct 31 – Nov 1, 2026');
+    expect(formatEventDates({ startDate: '2026-12-31', endDate: '2027-01-01' })).toBe('Dec 31, 2026 – Jan 1, 2027');
+  });
+  it('njToday uses New Jersey time, not the phone’s or UTC', () => {
+    expect(njToday(new Date('2026-10-10T03:30:00Z'))).toBe('2026-10-09'); // 11:30 PM the night before in NJ
+    expect(njToday(new Date('2026-10-10T04:30:00Z'))).toBe('2026-10-10');
+    expect(njToday(new Date('2026-01-01T04:59:00Z'))).toBe('2025-12-31');
+  });
+});
+
+describe('initials', () => {
+  it.each([
+    ['Yuvraaj Kumar (Yuvi)', 'YK'],
+    ['Dr. Thomas Abraham', 'TA'],
+    ['Aditi Menon', 'AM'],
+    ['Cher', 'C'],
+    ['  ', ''],
+  ])('%s -> %s', (name, expected) => expect(initials(name)).toBe(expected));
 });

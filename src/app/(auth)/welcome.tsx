@@ -84,6 +84,7 @@ export default function WelcomeScreen() {
           router.push('/sign-in');
         }}
       />
+      <TextLink label="About CoW" onPress={() => router.push('/about')} />
     </Screen>
   );
 }
