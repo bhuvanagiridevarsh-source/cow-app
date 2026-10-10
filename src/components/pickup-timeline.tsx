@@ -1,6 +1,6 @@
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
-import { StyleSheet, View } from 'react-native';
-import Animated, { useReducedMotion } from 'react-native-reanimated';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
+import Animated, { useReducedMotion, type CSSTransitionProperties } from 'react-native-reanimated';
 
 import { AppText } from '@/components/ui/app-text';
 import { TIMELINE_LABELS } from '@/domain/pickup-text';
@@ -13,7 +13,9 @@ export function PickupTimeline({ status }: { status: PickupStatus }) {
   const p = usePalette();
   const reduceMotion = useReducedMotion();
   // Steps fill in smoothly when the pickup moves on.
-  const ease = reduceMotion ? null : { transitionProperty: ['backgroundColor', 'borderColor'], transitionDuration: 350 };
+  const ease: CSSTransitionProperties<ViewStyle> | null = reduceMotion
+    ? null
+    : { transitionProperty: ['backgroundColor', 'borderColor'], transitionDuration: 350 };
   const current = timelineStep(status);
   const stopped = current < 0;
   const summary = stopped

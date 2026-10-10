@@ -1,0 +1,6 @@
+{
+  "//": "Type-checks the code the way a brand-new copy from GitHub sees it: without the helper files Expo generates on your computer (expo-env.d.ts and .expo/types). `npm run typecheck` runs both this and tsconfig.json, so the checks can't pass on one machine and fail on a fresh copy.",
+  "extends": "./tsconfig.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "expo-env.d.ts", ".expo", ".export-check"]
+}
